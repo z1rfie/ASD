@@ -53,3 +53,12 @@ function(add_depend TARGET LIB INCLUDE_DIR)
     #get_property ( LIB_LIST GLOBAL PROPERTY LIBS_P)
 	target_link_libraries(${TARGET} ${LIB}) 
 endfunction()
+
+
+# define test hooks
+function(add_gtest test_name test_source)
+    add_executable(${test_name} ${test_source})
+    target_include_directories(${test_name} PUBLIC ${CMAKE_SOURCE_DIR})
+    target_link_libraries(${test_name} gtest gtest_main)
+    add_test(NAME ${test_name} COMMAND ${test_name})
+endfunction()

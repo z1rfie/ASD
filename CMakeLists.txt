@@ -1,5 +1,8 @@
 ﻿# указывайте последнюю доступную вам версию CMake
-cmake_minimum_required(VERSION 3.31 FATAL_ERROR)
+
+cmake_minimum_required(VERSION 3.14)
+set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # название проекта
 project(Algorithms-and-Data-Structures)
@@ -15,7 +18,12 @@ add_subdirectory(main)                # подключаем дополните�
 
 option(BTEST "build test?" ON)        # указываем подключаем ли google-тесты (ON или YES) или нет (OFF или NO)
 
-if(BTEST)                             # если тесты подключены
-    add_subdirectory(third_party/gtest)           # подключаем дополнительный CMakeLists.txt из подкаталога с именем gtest
-    add_subdirectory(tests)           # подключаем дополнительный CMakeLists.txt из подкаталога с именем test
+if(BTEST)                             # если тесты подключены         
+    set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+    add_subdirectory("third_party/gtest" EXCLUDE_FROM_ALL)
+    enable_testing()
+    add_gtest(test_EasyExample "tests/test_easy_example.cpp")
+    add_depend(test_EasyExample EasyExample "lib_easy_example/")
 endif()
+
+
