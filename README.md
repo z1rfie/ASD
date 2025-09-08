@@ -37,6 +37,11 @@
 
 ## Основные команды для git
 
+```
+git submodule sync
+git submodule update --init --recursive
+```
+
 ```git clone ссылка-до-ВАШЕГО-репозитория```
 
 ```git branch имя-рабочей-ветки```
