@@ -22,8 +22,7 @@ if(BTEST)                             # если тесты подключены
     set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
     add_subdirectory("third_party/gtest" EXCLUDE_FROM_ALL)
     enable_testing()
-    add_gtest(test_EasyExample "tests/test_easy_example.cpp")
-    add_depend(test_EasyExample EasyExample "lib_easy_example/")
+    add_subdirectory(tests)
 endif()
 
 
