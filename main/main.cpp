@@ -1,5 +1,3 @@
-// Copyright 2024 Marina Usova
-
 //#define EASY_EXAMPLE
 #define MATRIX
 #ifdef EASY_EXAMPLE
