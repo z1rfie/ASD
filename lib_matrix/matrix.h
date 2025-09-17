@@ -1,16 +1,34 @@
 #define MATRIX
 #ifdef MATRIX
 #include "../lib_math_vector/math_vector.h"
+#include <iostream>
 
 template<typename T>
 class Matrix : public MathVector<MathVector<T>> {
-	MathVector<MathVector<T>> _data;
+	size_t _N;
+	size_t _M;
 public:
 	Matrix() = default;
-	Matrix(size_t M, size_t N) : MathVector<MathVector<T>>(M) {
-		for (size_t i = 0; i < N; i++) {
-			_data[i] = new MathVector<T>(M);
-		}
+	Matrix(size_t N, size_t M) : _N(N), _M(M) {}
+
+	Matrix<T> operator+(Matrix<T> matr) {
+		std::cout << std::endl << "to do +" << std::endl;
+		return *this;
+	}
+	Matrix<T> operator-(Matrix<T> matr) {
+		std::cout << std::endl << "to do -" << std::endl;
+		return *this;
+	}
+	Matrix<T> operator*(Matrix<T> matr) {
+		std::cout << std::endl << "to do *" << std::endl;
+		return *this;
+	}
+
+	void input_matrix() {
+		std::cout << std::endl << "to do input" << std::endl;
+	}
+	void print_matrix() {
+		std::cout << std::endl << "to do print" << std::endl;
 	}
 };
 
