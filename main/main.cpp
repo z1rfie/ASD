@@ -5,128 +5,6 @@
 #include <iostream>
 #include <cstdlib>
 
-/*int main() {
-	int choice;
-	size_t N1, M1;
-
-	std::cout << std::endl << "\t MATRIX OPERATIONS \t" << std::endl;
-	std::cout << std::endl << "Enter the number of matrix rows and columns separated by spaces: ";
-	std::cin >> N1 >> M1;
-	Matrix<size_t> first_matrix(N1, M1);
-	std::cout << std::endl << "Enter the matrix elements: ";
-	first_matrix.input_matrix();
-
-	system("pause");
-
-	while (1) {
-		system("cls");
-		std::cout << std::endl << "\t MATRIX OPERATIONS \t" << std::endl;
-		std::cout << std::endl;
-		std::cout << "-- Your matrix: --" << std::endl;
-		first_matrix.print_matrix();
-		std::cout << std::endl;
-		std::cout << "1. Addition" << std::endl;
-		std::cout << "2. Subtraction" << std::endl;
-		std::cout << "3. Multiplication" << std::endl;
-		std::cout << "4. Multiplication by a scalar" << std::endl;
-		std::cout << "5. Multiplication by a vector" << std::endl;
-		std::cout << "6. Transpose" << std::endl;
-		std::cout << "7. Exit" << std::endl;
-		std::cout << std::endl;
-		std::cout << "Choose an operation (1-6): ";
-		std::cin >> choice;
-		std::cout << std::endl;
-
-		if (choice == 7) {
-			break;
-		}
-
-		if (choice < 1 || choice > 7) {
-			std::cout << "Incorrect choice! Try again." << std::endl;
-			continue;
-		}
-
-		while (1) {
-			size_t N2 = 0, M2 = 0;
-			if (choice > 0 && choice < 4) {
-				std::cout << "Enter the number of rows and columns of the second matrix, separated by spaces: ";
-				std::cin >> N2 >> M2;
-
-				if ((choice == 1 || choice == 2) && (N1 != N2 || M1 != M2)) {
-					std::cout << std::endl << "For addition/subtraction, matrices must be the same size! Try again." << std::endl;
-					continue;
-				}
-
-				if (choice == 3 && M1 != N2) {
-					std::cout << std::endl << "For multiplication, the number of columns of the first matrix must match the number of rows of the second! Try again." << std::endl;
-					continue;
-				}
-			}
-
-			int scalar;
-			if (choice == 4) {
-				std::cout << "Enter a scalar: ";
-				std::cin >> scalar;
-			}
-
-			MathVector<size_t> vector;
-			if (choice == 5) {
-				std::cout << "Enter a vector: ";
-				vector.input_vector();
-			}
-
-			Matrix<size_t> second_matrix(N2, M2);
-
-			if (choice > 0 && choice < 4) {
-				std::cout << std::endl << "Enter the elements of the second matrix:" << std::endl;
-				second_matrix.input_matrix();
-			}
-
-			switch (choice) {
-			case 1:
-				first_matrix = first_matrix + second_matrix;
-				std::cout << std::endl << "Result of addition:" << std::endl;
-				first_matrix.print_matrix();
-				break;
-
-			case 2:
-				first_matrix = first_matrix - second_matrix;
-				std::cout << std::endl << "Result of subtraction:" << std::endl;
-				first_matrix.print_matrix();
-				break;
-
-			case 3:
-				first_matrix = first_matrix * second_matrix;
-				std::cout << std::endl << "Result of multiplication:" << std::endl;
-				N1 = first_matrix.get_n();
-				M1 = first_matrix.get_m();
-				first_matrix.print_matrix();
-				break;
-			case 4:
-				first_matrix = first_matrix * scalar;
-				std::cout << std::endl << "Result of multiplication by a scalar:" << std::endl;
-				first_matrix.print_matrix();
-				break;
-			case 5:
-				first_matrix = first_matrix * vector;
-				std::cout << std::endl << "Result of multiplication by a vector:" << std::endl;
-				first_matrix.print_matrix();
-			case 6:
-				first_matrix.transposition_matrix();
-				std::cout << std::endl << "Transposition result:" << std::endl;
-				first_matrix.print_matrix();
-				break;
-			}
-
-			system("pause");
-			break;
-		}
-	}
-
-	return 0;
-}*/
-
-
 void triangular_matrices_menu();
 void vectors_menu();
 void matrix_operations_menu();
@@ -312,7 +190,6 @@ void multiplication_menu(Matrix<size_t>& matrix) {
     //system("pause");
 }
 
-// Заглушки для других меню
 void triangular_matrices_menu() {
     std::cout << "Triangular matrices menu - coming soon!" << std::endl;
     system("pause");
