@@ -2,9 +2,9 @@
 #ifdef TVECTOR
 
 template<typename T>
-class TVector {
+class TriangleMatrix : public Matrix<T> {
 public:
-	TVector() = default;
+	TriangleMatrix() = default;
 };
 
 #endif // TVECTOR

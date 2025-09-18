@@ -15,8 +15,14 @@ public:
 
 	Matrix<T> operator+(Matrix<T> matr);
 	Matrix<T> operator-(Matrix<T> matr);
-	Matrix<T> operator*(Matrix<T> matr);
 	Matrix<T> operator*(T val);
+	MathVector<T> operator*(MathVector<T> vec);
+	Matrix<T> operator*(Matrix<T> matr);
+	Matrix<T>& operator=(const MathVector<T>& vector);
+	MathVector<T>& operator[](size_t index);
+
+	size_t get_n();
+	size_t get_m();
 
 	void transposition_matrix();
 
@@ -41,16 +47,34 @@ Matrix<T> Matrix<T>::operator-(Matrix<T> matr) {
 }
 
 template<typename T>
+Matrix<T> Matrix<T>::operator*(T val) {
+	std::cout << std::endl << "to do * scalar" << std::endl;
+	return *this;
+}
+
+template<typename T>
+MathVector<T> Matrix<T>::operator*(MathVector<T> vec) {
+	std::cout << std::endl << "to do * vec" << std::endl;
+	return MathVector<T>(_N);
+}
+
+template<typename T>
 Matrix<T> Matrix<T>::operator*(Matrix<T> matr) {
 	std::cout << std::endl << "to do *" << std::endl;
 	return *this;
 }
 
 template<typename T>
-Matrix<T> Matrix<T>::operator*(T val) {
-	std::cout << std::endl << "to do * scalar" << std::endl;
+Matrix<T>& Matrix<T>::operator=(const MathVector<T>& vector) {
+	std::cout << std::endl << "to do = " << std::endl;
 	return *this;
 }
+
+template<typename T>
+size_t Matrix<T>::get_n() { return _N; }
+
+template<typename T>
+size_t Matrix<T>::get_m() { return _M; }
 
 template<typename T>
 void Matrix<T>::transposition_matrix() {
