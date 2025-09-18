@@ -7,29 +7,64 @@ template<typename T>
 class Matrix : public MathVector<MathVector<T>> {
 	size_t _N;
 	size_t _M;
+	//size_t _size;
 public:
 	Matrix() = default;
-	Matrix(size_t N, size_t M) : _N(N), _M(M) {}
+	Matrix(size_t N, size_t M);
+	//Matrix(size_t size) : _size(size) {}
 
-	Matrix<T> operator+(Matrix<T> matr) {
-		std::cout << std::endl << "to do +" << std::endl;
-		return *this;
-	}
-	Matrix<T> operator-(Matrix<T> matr) {
-		std::cout << std::endl << "to do -" << std::endl;
-		return *this;
-	}
-	Matrix<T> operator*(Matrix<T> matr) {
-		std::cout << std::endl << "to do *" << std::endl;
-		return *this;
-	}
+	Matrix<T> operator+(Matrix<T> matr);
+	Matrix<T> operator-(Matrix<T> matr);
+	Matrix<T> operator*(Matrix<T> matr);
+	Matrix<T> operator*(T val);
 
-	void input_matrix() {
-		std::cout << std::endl << "to do input" << std::endl;
-	}
-	void print_matrix() {
-		std::cout << std::endl << "to do print" << std::endl;
-	}
+	void transposition_matrix();
+
+	void input_matrix();
+	void print_matrix();
 };
+
+template<typename T>
+Matrix<T>::Matrix(size_t N, size_t M) : _N(N), _M(M) {}
+//Matrix(size_t size) : _size(size) {}
+
+template<typename T>
+Matrix<T> Matrix<T>::operator+(Matrix<T> matr) {
+	std::cout << std::endl << "to do +" << std::endl;
+	return *this;
+}
+
+template<typename T>
+Matrix<T> Matrix<T>::operator-(Matrix<T> matr) {
+	std::cout << std::endl << "to do -" << std::endl;
+	return *this;
+}
+
+template<typename T>
+Matrix<T> Matrix<T>::operator*(Matrix<T> matr) {
+	std::cout << std::endl << "to do *" << std::endl;
+	return *this;
+}
+
+template<typename T>
+Matrix<T> Matrix<T>::operator*(T val) {
+	std::cout << std::endl << "to do * scalar" << std::endl;
+	return *this;
+}
+
+template<typename T>
+void Matrix<T>::transposition_matrix() {
+	std::cout << std::endl << "to do transposition" << std::endl;
+}
+
+template<typename T>
+void Matrix<T>::input_matrix() {
+	std::cout << std::endl << "to do input" << std::endl;
+}
+
+template<typename T>
+void Matrix<T>::print_matrix() {
+	std::cout << std::endl << "to do print" << std::endl;
+}
 
 #endif // MATRIX
