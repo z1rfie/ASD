@@ -6,8 +6,6 @@
 #include <iostream>
 #include <cstdlib>
 
-// реализовать что мы сначала вводим а потом операции с матрицами
-
 int main() {
     setlocale(LC_ALL, "rus");
 
