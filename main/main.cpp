@@ -2,13 +2,17 @@
 #ifdef MATRIX
 
 #include "../lib_matrix/matrix.h"
+#include "../lib_triangle_matrix/triangle_matrix.h"
 #include <iostream>
 #include <cstdlib>
 
 void triangular_matrices_menu();
 void vectors_menu();
-void matrix_operations_menu();
-void multiplication_menu(Matrix<size_t>& matrix);
+void regular_matrix_operations_menu();
+template<typename T>
+void regular_multiplication_menu(Matrix<T>& matrix);
+template<typename T>
+void triangular_multiplication_menu(TriangleMatrix<T>& matrix);
 
 int main() {
     int main_choice;
@@ -27,7 +31,7 @@ int main() {
         std::cin >> main_choice;
 
         switch (main_choice) {
-        case 1: matrix_operations_menu(); break;
+        case 1: regular_matrix_operations_menu(); break;
         case 2: triangular_matrices_menu(); break;
         case 3: vectors_menu(); break;
         case 4: return 0;
@@ -38,7 +42,7 @@ int main() {
     }
 }
 
-void matrix_operations_menu() {
+void regular_matrix_operations_menu() {
     int choice;
     size_t N1, M1;
     system("cls");
@@ -108,7 +112,7 @@ void matrix_operations_menu() {
 				break;
 
 			case 3:
-				multiplication_menu(first_matrix);
+                regular_multiplication_menu(first_matrix);
 				break;
 			case 4:
 				first_matrix.transposition_matrix();
@@ -124,7 +128,8 @@ void matrix_operations_menu() {
     }
 }
 
-void multiplication_menu(Matrix<size_t>& matrix) {
+template<typename T>
+void regular_multiplication_menu(Matrix<T>& matrix) {
     int choice;
     size_t N = matrix.get_n();
     size_t M = matrix.get_m();
@@ -191,7 +196,154 @@ void multiplication_menu(Matrix<size_t>& matrix) {
 }
 
 void triangular_matrices_menu() {
-    std::cout << "Triangular matrices menu - coming soon!" << std::endl;
+    int choice;
+    size_t first_size;
+    system("cls");
+    std::cout << std::endl << "\t TRIANGLE MATRIX OPERATIONS \t" << std::endl;
+    std::cout << std::endl << "Enter the size of the triangular matrix: ";
+    std::cin >> first_size;
+    TriangleMatrix<size_t> first_matrix(first_size);
+    std::cout << std::endl << "Enter the matrix elements: ";
+    first_matrix.input_triangle();
+
+    system("pause");
+
+    while (1) {
+        system("cls");
+        std::cout << std::endl << "\t TRIANGLE MATRIX OPERATIONS \t" << std::endl;
+        std::cout << std::endl << "-- Your matrix: --" << std::endl;
+        first_matrix.print_triangle();
+        std::cout << std::endl;
+        std::cout << "1. Addition" << std::endl;
+        std::cout << "2. Subtraction" << std::endl;
+        std::cout << "3. Multiplication" << std::endl;
+        std::cout << "4. Transpose" << std::endl;
+        std::cout << "5. Back" << std::endl;
+        std::cout << std::endl;
+        std::cout << "Choose operation (1-5): ";
+        std::cin >> choice;
+
+        if (choice == 5) break;
+        if (choice < 1 || choice > 5) {
+            std::cout << "Incorrect choice! Try again." << std::endl;
+            system("pause");
+            continue;
+        }
+
+        while (1) {
+            size_t second_size = 0;
+            if (choice > 0 && choice < 3) {
+                std::cout << "Enter the size of the second triangular matrix: ";
+                std::cin >> second_size;
+
+                if ((choice == 1 || choice == 2) && (first_size != second_size)) {
+                    std::cout << std::endl << "For addition/subtraction, matrices must be the same size! Try again." << std::endl;
+                    continue;
+                }
+            }
+
+            TriangleMatrix<size_t> second_matrix(second_size);
+
+            if (choice > 0 && choice < 3) {
+                std::cout << std::endl << "Enter the elements of the second matrix:" << std::endl;
+                second_matrix.input_triangle();
+            }
+
+            switch (choice) {
+            case 1:
+                first_matrix = first_matrix + second_matrix;
+                std::cout << std::endl << "Result of addition:" << std::endl;
+                first_matrix.print_triangle();
+                system("pause");
+                break;
+            case 2:
+                first_matrix = first_matrix - second_matrix;
+                std::cout << std::endl << "Result of subtraction:" << std::endl;
+                first_matrix.print_triangle();
+                system("pause");
+                break;
+            case 3:
+                triangular_multiplication_menu(first_matrix);
+                break;
+            case 4:
+                first_matrix.transposition_matrix();
+                std::cout << std::endl << "Transposition result:" << std::endl;
+                first_matrix.print_triangle();
+                system("pause");
+                break;
+            }
+            /*first_matrix.print_matrix();
+            system("pause");*/
+            break;
+        }
+    }
+}
+
+// the problem of redundant functions
+
+template<typename T>
+void triangular_multiplication_menu(TriangleMatrix<T>& matrix) {
+    int choice;
+    size_t first_size = matrix.get_size();
+
+    system("cls");
+    std::cout << std::endl << "\t MULTIPLICATION \t" << std::endl;
+    std::cout << std::endl;
+    std::cout << "1. Multiply by scalar" << std::endl;
+    std::cout << "2. Multiply by vector" << std::endl;
+    std::cout << "3. Multiply by matrix" << std::endl;
+    std::cout << "4. Back" << std::endl;
+    std::cout << std::endl;
+    std::cout << "Choose option (1-4): ";
+    std::cin >> choice;
+
+    if (choice == 4) return;
+
+    switch (choice) {
+    case 1:
+        int scalar;
+        std::cout << "Enter scalar: ";
+        std::cin >> scalar;
+        matrix = matrix * scalar;
+        break;
+    case 2:
+        size_t vector_size;
+        while (1) {
+            std::cout << "Enter vector size: ";
+            std::cin >> vector_size;
+
+            if (first_size == vector_size) {
+                break;
+            }
+
+            std::cout << "Matrix size (" << first_size << ") must match vector size (" << vector_size << ")!" << std::endl;
+            std::cout << "Please try again." << std::endl;
+        }
+
+        MathVector<size_t> vector(vector_size);
+        std::cout << "Enter vector elements:" << std::endl;
+        vector.input_vector();
+        matrix = matrix * vector;
+        break;
+    case 3:
+        size_t second_size;
+
+        while (1) {
+            std::cout << "Enter second matrix size: ";
+            std::cin >> second_size;
+
+            if (first_size != second_size) {
+                std::cout << std::endl << "The size of the first matrix must match the size of the second matrix. Try again." << std::endl;
+                continue;
+            }
+            else break;
+        }
+
+        TriangleMatrix<size_t> second_matrix(second_size);
+        second_matrix.input_triangle();
+        matrix = matrix * second_matrix;
+        break;
+    }
     system("pause");
 }
 
