@@ -154,25 +154,26 @@ void regular_multiplication_menu(Matrix<T>& matrix) {
         std::cin >> scalar;
         matrix = matrix * scalar;
         break;
-    case 2: 
-		size_t vector_size;
-		while (1) {
-			std::cout << "Enter vector size: ";
-			std::cin >> vector_size;
+    case 2: {
+        size_t vector_size;
+        while (1) {
+            std::cout << "Enter vector size: ";
+            std::cin >> vector_size;
 
-			if (M == vector_size) {
-				break; 
-			}
+            if (M == vector_size) {
+                break;
+            }
 
-			std::cout << "Matrix columns (" << M << ") must match vector size (" << vector_size << ")!" << std::endl;
-			std::cout << "Please try again." << std::endl;
-		}
+            std::cout << "Matrix columns (" << M << ") must match vector size (" << vector_size << ")!" << std::endl;
+            std::cout << "Please try again." << std::endl;
+        }
 
-		MathVector<size_t> vector(vector_size);
-		std::cout << "Enter vector elements:" << std::endl;
-		vector.input_vector();
-		matrix = matrix * vector;
-		break;
+        MathVector<size_t> vector(vector_size);
+        std::cout << "Enter vector elements:" << std::endl;
+        vector.input_vector();
+        matrix = matrix * vector;
+        break;
+    }
 	case 3: 
 		size_t N2, M2;
 
@@ -300,13 +301,14 @@ void triangular_multiplication_menu(TriangleMatrix<T>& matrix) {
     if (choice == 4) return;
 
     switch (choice) {
-    case 1:
+    case 1: {
         int scalar;
         std::cout << "Enter scalar: ";
         std::cin >> scalar;
         matrix = matrix * scalar;
         break;
-    case 2:
+    }
+    case 2: {
         size_t vector_size;
         while (1) {
             std::cout << "Enter vector size: ";
@@ -325,7 +327,8 @@ void triangular_multiplication_menu(TriangleMatrix<T>& matrix) {
         vector.input_vector();
         matrix = matrix * vector;
         break;
-    case 3:
+    }
+    case 3: {
         size_t second_size;
 
         while (1) {
@@ -343,6 +346,8 @@ void triangular_multiplication_menu(TriangleMatrix<T>& matrix) {
         second_matrix.input_triangle();
         matrix = matrix * second_matrix;
         break;
+    }
+
     }
     system("pause");
 }
