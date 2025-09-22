@@ -187,7 +187,7 @@ void multiplication_menu(Matrix<size_t>& matrix) {
 		matrix = matrix * second_matrix;
 		break;
     }
-    //system("pause");
+    system("pause");
 }
 
 void triangular_matrices_menu() {

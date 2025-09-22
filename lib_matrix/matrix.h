@@ -13,12 +13,12 @@ public:
 	Matrix(size_t N, size_t M);
 	//Matrix(size_t size) : _size(size) {}
 
-	Matrix<T> operator+(Matrix<T> matr);
-	Matrix<T> operator-(Matrix<T> matr);
-	Matrix<T> operator*(T val);
-	MathVector<T> operator*(MathVector<T> vec);
-	Matrix<T> operator*(Matrix<T> matr);
-	Matrix<T>& operator=(const MathVector<T>& vector);
+	Matrix<T> operator+(const Matrix<T> matr) const;
+	Matrix<T> operator-(const Matrix<T> matr) const;
+	Matrix<T> operator*(T val) const;
+	MathVector<T> operator*(const MathVector<T> vec) const;
+	Matrix<T> operator*(const Matrix<T> matr) const;
+	Matrix<T>& operator=(const MathVector<T>& vector); 
 	MathVector<T>& operator[](size_t index);
 
 	size_t get_n();
@@ -27,7 +27,9 @@ public:
 	void transposition_matrix();
 
 	void input_matrix();
-	void print_matrix();
+	void print_matrix() const;
+private:
+	bool is_valid_matrix() const;
 };
 
 template<typename T>
@@ -35,31 +37,31 @@ Matrix<T>::Matrix(size_t N, size_t M) : _N(N), _M(M) {}
 //Matrix(size_t size) : _size(size) {}
 
 template<typename T>
-Matrix<T> Matrix<T>::operator+(Matrix<T> matr) {
+Matrix<T> Matrix<T>::operator+(const Matrix<T> matr) const  {
 	std::cout << std::endl << "to do +" << std::endl;
 	return *this;
 }
 
 template<typename T>
-Matrix<T> Matrix<T>::operator-(Matrix<T> matr) {
+Matrix<T> Matrix<T>::operator-(const Matrix<T> matr) const {
 	std::cout << std::endl << "to do -" << std::endl;
 	return *this;
 }
 
 template<typename T>
-Matrix<T> Matrix<T>::operator*(T val) {
+Matrix<T> Matrix<T>::operator*(T val) const {
 	std::cout << std::endl << "to do * scalar" << std::endl;
 	return *this;
 }
 
 template<typename T>
-MathVector<T> Matrix<T>::operator*(MathVector<T> vec) {
+MathVector<T> Matrix<T>::operator*(const MathVector<T> vec) const {
 	std::cout << std::endl << "to do * vec" << std::endl;
 	return MathVector<T>(_N);
 }
 
 template<typename T>
-Matrix<T> Matrix<T>::operator*(Matrix<T> matr) {
+Matrix<T> Matrix<T>::operator*(const Matrix<T> matr) const {
 	std::cout << std::endl << "to do *" << std::endl;
 	return *this;
 }
@@ -87,7 +89,7 @@ void Matrix<T>::input_matrix() {
 }
 
 template<typename T>
-void Matrix<T>::print_matrix() {
+void Matrix<T>::print_matrix() const {
 	std::cout << std::endl << "to do print" << std::endl;
 }
 
