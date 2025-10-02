@@ -11,8 +11,10 @@ public:
 
 	TriangleMatrix<T>& operator=(const MathVector<T>& other);
 	TriangleMatrix<T>& operator=(const TriangleMatrix<T>& other);
+
     TriangleMatrix<T> operator+(const TriangleMatrix<T>& other) const;
     TriangleMatrix<T> operator-(const TriangleMatrix<T>& other) const;
+
     TriangleMatrix<T> operator*(T scalar) const;
 	MathVector<T> operator*(const MathVector<T> vec) const;
     TriangleMatrix<T> operator*(const TriangleMatrix<T>& other) const;

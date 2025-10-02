@@ -273,8 +273,7 @@ TEST(TestTVectorLib, pop_front_elem) {
     EXPECT_EQ(vec.size(), 13);
 
     for (int i = 0; i < 14; i++) {
-        EXPECT_EQ(vec.states()[i], expected_states[i])
-            << "State mismatch at index " << i;
+        EXPECT_EQ(vec.states()[i], expected_states[i]);
     }
 }
 
@@ -291,8 +290,7 @@ TEST(TestTVectorLib, pop_back_elem) {
     EXPECT_EQ(vec.size(), 13);
 
     for (int i = 0; i < 14; i++) {
-        EXPECT_EQ(vec.states()[i], expected_states[i])
-            << "State mismatch at index " << i;
+        EXPECT_EQ(vec.states()[i], expected_states[i]);
     }
 }
 
@@ -309,8 +307,7 @@ TEST(TestTVectorLib, erase_elem) {
     EXPECT_EQ(vec.size(), 13);
 
     for (int i = 0; i < 14; i++) {
-        EXPECT_EQ(vec.states()[i], expected_states[i])
-            << "State mismatch at index " << i;
+        EXPECT_EQ(vec.states()[i], expected_states[i]);
     }
 }
 
@@ -327,8 +324,7 @@ TEST(TestTVectorLib, pop_front_elems) {
     EXPECT_EQ(vec.size(), 12);
 
     for (int i = 0; i < 14; i++) {
-        EXPECT_EQ(vec.states()[i], expected_states[i])
-            << "State mismatch at index " << i;
+        EXPECT_EQ(vec.states()[i], expected_states[i]);
     }
 }
 
@@ -345,8 +341,7 @@ TEST(TestTVectorLib, pop_back_elems) {
     EXPECT_EQ(vec.size(), 12);
 
     for (int i = 0; i < 14; i++) {
-        EXPECT_EQ(vec.states()[i], expected_states[i])
-            << "State mismatch at index " << i;
+        EXPECT_EQ(vec.states()[i], expected_states[i]);
     }
 }
 
@@ -363,8 +358,7 @@ TEST(TestTVectorLib, erase_elems) {
     EXPECT_EQ(vec.size(), 12);
 
     for (int i = 0; i < 14; i++) {
-        EXPECT_EQ(vec.states()[i], expected_states[i])
-            << "State mismatch at index " << i;
+        EXPECT_EQ(vec.states()[i], expected_states[i]);
     }
 }
 
@@ -518,118 +512,86 @@ TEST(TestTVectorLib, not_find_last_elems) {
     int* actual_result = find_elems(vec, 111); 
 
     // Assert
-    EXPECT_EQ(actual_result[0], -1) << "First element should be -1 when no matches found";
+    EXPECT_EQ(actual_result[0], -1);
 }
 
-bool test_find_all_elem() {
+TEST(TestTVectorLib, find_all_elem) {
+    // Arrange
     int arr[14] = { 1, 2, 3, 4, 5, 10, 7, 8, 9, 10, 11, 12, 13, 14 };
-    TVector<int> vec1(arr, 14);
-    int* actual_res = find_elems(vec1, 10);
-    int expected_res[2] = { 5, 9 };
+    TVector<int> vec(arr, 14);
+    int expected_results[2] = { 5, 9 };
+
+    // Act
+    int* actual_results = find_elems(vec, 10);
+
+    // Assert
     for (int i = 0; i < 2; i++) {
-        if (actual_res[i] != expected_res[i]) {
-            return false;
-        }
+        EXPECT_EQ(actual_results[i], expected_results[i]);
     }
-    return true;
 }
 
-// continue
+TEST(TestTVectorLib, find_first_elem_in_empty_mass) {
+    // Arrange
+    TVector<int> vec;
 
-bool test_find_first_elem_in_empty_mass() {
-    TVector<int> vec1;
-
-    bool expected_result = true;
-    bool actual_result = false;
-    try {
-        find_first(vec1, 6);
-    }
-    catch (const std::exception& ex) {
-        actual_result = true;
-    }
-
-    return TestSystem::check(expected_result, actual_result);
+    // Act & Assert
+    EXPECT_THROW(find_first(vec, 6), std::exception);
 }
 
-bool test_find_last_elem_in_empty_mass() {
-    TVector<int> vec1;
+TEST(TestTVectorLib, find_last_elem_in_empty_mass) {
+    // Arrange
+    TVector<int> vec;
 
-    bool expected_result = true;
-    bool actual_result = false;
-    try {
-        find_last(vec1, 6);
-    }
-    catch (const std::exception& ex) {
-        actual_result = true;
-    }
-
-    return TestSystem::check(expected_result, actual_result);
+    // Act & Assert
+    EXPECT_THROW(find_last(vec, 6), std::exception);
 }
 
-bool test_find_all_elem_in_empty_mass() {
-    TVector<int> vec1;
+TEST(TestTVectorLib, find_all_elem_in_empty_mass) {
+    // Arrange
+    TVector<int> vec;
 
-    bool expected_result = true;
-    bool actual_result = false;
-    try {
-        find_elems(vec1, 6);
-    }
-    catch (const std::exception& ex) {
-        actual_result = true;
-    }
-
-    return TestSystem::check(expected_result, actual_result);
+    // Act & Assert
+    EXPECT_THROW(find_elems(vec, 6), std::exception);
 }
 
-bool test_emplace() {
+TEST(TestTVectorLib, emplace) {
+    // Arrange
     int arr[14] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 };
     TVector<int> vec1(arr, 14);
-    vec1.emplace(6, 999);
     int expected_res[14] = { 1, 2, 3, 4, 5, 999, 7, 8, 9, 10, 11, 12, 13, 14 };
     TVector<int> vec2(expected_res, 14);
 
-    if (vec1 != vec2) {
-        return false;
-    }
-    return true;
+    // Act
+    vec1.emplace(6, 999);
+
+    // Assert
+    EXPECT_EQ(vec1, vec2);
 }
 
-bool test_emplace_with_deleted() {
+TEST(TestTVectorLib, emplace_with_deleted) {
+    // Arrange
     int arr[5] = { 1, 2, 3, 4, 5 };
     TVector<int> vec(arr, 5);
 
+    // Act
     vec.erase_elem(3);
-
     vec.emplace(3, 999);
 
-    if (vec.size() != 4) return false;
-    if (vec[2] != 999) return false;
-
-    return true;
+    // Assert
+    EXPECT_EQ(vec.size(), 4);
+    EXPECT_EQ(vec[2], 999);
 }
 
-bool test_emplace_exceptions() {
+TEST(TestTVectorLib, emplace_exceptions) {
     TVector<int> empty_vec;
-    bool caught_empty = false;
-    try {
-        empty_vec.emplace(0, 1);
-    }
-    catch (const std::out_of_range&) {
-        caught_empty = true;
-    }
-
+    EXPECT_THROW(empty_vec.emplace(0, 1), std::out_of_range);
+    
     TVector<int> vec;
     vec.push_back_elem(1);
-    bool caught_range = false;
-    try {
-        vec.emplace(2, 2);
-    }
-    catch (const std::out_of_range&) {
-        caught_range = true;
-    }
-
-    return caught_empty && caught_range;
+    EXPECT_THROW(vec.emplace(2, 2), std::out_of_range);
 }
+
+////////////////////////////
 
 bool test_randomize() {
     int arr[14] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 };

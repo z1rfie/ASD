@@ -35,6 +35,7 @@ enum State { empty, busy, deleted };
 
 template<class T>
 class TVector {
+protected:
     T* _data;
     size_t _capacity;
     size_t _size;
@@ -90,6 +91,7 @@ public:
     bool operator==(const TVector<T>& other) const noexcept;
     bool operator!=(const TVector<T>& other) const noexcept;
     T& operator[](size_t pos);
+    const T& operator[](size_t pos) const;
 
     void print_elems();
     void print_states();
@@ -766,22 +768,30 @@ void TVector<T>::resize(size_t new_size, const T& value) {
 template <typename T>
 TVector<T>& TVector<T>::operator=(const TVector<T>& other) {
     if (this != &other) {
-        if (_capacity != other._capacity) {
-            free_memory();
-            reserve(other._capacity);
-        }
-        for (size_t i = 0; i < other._size; ++i) {
-            if (other._states[i] == busy) {
-                _data[i] = other._data[i];
-                _states[i] = busy;
-            }
-            else if (other._states[i] == deleted) {
-                _states[i] = deleted;
-            }
-        }
+        free_memory();
 
         _size = other._size;
         _deleted = other._deleted;
+        _capacity = other._capacity;
+
+        if (_capacity > 0) {
+            _data = new T[_capacity];
+            _states = new State[_capacity];
+
+            for (size_t i = 0; i < _capacity; ++i) {
+                if (i < _size) {
+                    _data[i] = other._data[i];
+                    _states[i] = other._states[i];
+                }
+                else {
+                    _states[i] = empty;
+                }
+            }
+        }
+        else {
+            _data = nullptr;
+            _states = nullptr;
+        }
     }
     return *this;
 }
@@ -816,6 +826,14 @@ bool TVector<T>::operator!=(const TVector<T>& other) const noexcept {
 
 template <typename T>
 T& TVector<T>::operator[](size_t pos) {
+    while (pos < _size && _states[pos] != busy) {
+        pos++;
+    }
+    return _data[pos];
+}
+
+template <typename T>
+const T& TVector<T>::operator[](size_t pos) const {
     while (pos < _size && _states[pos] != busy) {
         pos++;
     }

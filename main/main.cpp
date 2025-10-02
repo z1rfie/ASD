@@ -49,9 +49,9 @@ void regular_matrix_operations_menu() {
     std::cout << std::endl << "\t MATRIX OPERATIONS \t" << std::endl;
     std::cout << std::endl << "Enter the number of matrix rows and columns separated by spaces: ";
     std::cin >> N1 >> M1;
-    Matrix<size_t> first_matrix(N1, M1);
-    std::cout << std::endl << "Enter the matrix elements: ";
-    first_matrix.input_matrix();
+    Matrix<int> first_matrix(N1, M1);
+    std::cout << std::endl << "Enter the matrix elements: " << std::endl;
+    first_matrix.input_matrix(N1,M1);
 
     system("pause");
 
@@ -83,32 +83,28 @@ void regular_matrix_operations_menu() {
 				std::cout << "Enter the number of rows and columns of the second matrix, separated by spaces: ";
 				std::cin >> N2 >> M2;
 
-				if ((choice == 1 || choice == 2) && (N1 != N2 || M1 != M2)) {
+				if ((choice == 1 || choice == 2) && (first_matrix.get_n() != N2 || first_matrix.get_m() != M2)) {
 					std::cout << std::endl << "For addition/subtraction, matrices must be the same size! Try again." << std::endl;
 					continue;
 				}
 			}
 
-			Matrix<size_t> second_matrix(N2, M2);
+			Matrix<int> second_matrix(N2, M2);
 
 			if (choice > 0 && choice < 3) {
 				std::cout << std::endl << "Enter the elements of the second matrix:" << std::endl;
-				second_matrix.input_matrix();
+				second_matrix.input_matrix(N2,M2);
 			}
 
 			switch (choice) {
 			case 1:
-				first_matrix = first_matrix + second_matrix;
+                first_matrix = first_matrix + second_matrix;
 				std::cout << std::endl << "Result of addition:" << std::endl;
-				first_matrix.print_matrix();
-				system("pause");
 				break;
 
 			case 2:
 				first_matrix = first_matrix - second_matrix;
 				std::cout << std::endl << "Result of subtraction:" << std::endl;
-				first_matrix.print_matrix();
-				system("pause");
 				break;
 
 			case 3:
@@ -117,12 +113,10 @@ void regular_matrix_operations_menu() {
 			case 4:
 				first_matrix.transposition_matrix();
 				std::cout << std::endl << "Transposition result:" << std::endl;
-				first_matrix.print_matrix();
-				system("pause");
 				break;
 			}
-			/*first_matrix.print_matrix();
-			system("pause");*/
+			first_matrix.print_matrix();
+			system("pause");
 			break;
 		}
     }
@@ -168,9 +162,11 @@ void regular_multiplication_menu(Matrix<T>& matrix) {
             std::cout << "Please try again." << std::endl;
         }
 
-        MathVector<size_t> vector(vector_size);
+        MathVector<int> vector(vector_size);
+
         std::cout << "Enter vector elements:" << std::endl;
         vector.input_vector();
+
         matrix = matrix * vector;
         break;
     }
@@ -188,12 +184,11 @@ void regular_multiplication_menu(Matrix<T>& matrix) {
 			else break;
 		}
 
-		Matrix<size_t> second_matrix(N2, M2);
-		second_matrix.input_matrix();
+		Matrix<int> second_matrix(N2, M2);
+		second_matrix.input_matrix(N2,M2);
 		matrix = matrix * second_matrix;
 		break;
     }
-    system("pause");
 }
 
 void triangular_matrices_menu() {
