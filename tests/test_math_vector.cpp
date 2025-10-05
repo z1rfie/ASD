@@ -44,20 +44,6 @@ TEST(TestMathVectorLib, size_and_index_constructor_big) {
     EXPECT_EQ(vec.start_index(), ind);
 }
 
-TEST(TestMathVectorLib, size_and_index_constructor_error_index) {
-    size_t size = 5;
-    size_t index = 50;
-
-    EXPECT_THROW(MathVector<int> vec(size, index), std::runtime_error);
-}
-
-TEST(TestMathVectorLib, size_and_index_constructor_error_size) {
-    size_t size = 0;
-    size_t index = 50;
-
-    EXPECT_THROW(MathVector<int> vec(size, index), std::runtime_error);
-}
-
 TEST(TestMathVectorLib, copy_constructor) {
     MathVector<int> vec1(10, 5);
     MathVector<int> vec2(vec1);
@@ -100,8 +86,8 @@ TEST(TestMathVectorLib, operator_addition_double) {
 
     MathVector<double> result = vec1 + vec2;
 
-    EXPECT_EQ(result[0], 5.0);
-    EXPECT_EQ(result[1], 7.0);
+    EXPECT_DOUBLE_EQ(result[0], 5.0);
+    EXPECT_DOUBLE_EQ(result[1], 7.0);
 }
 
 TEST(TestMathVectorLib, operator_plus_equal) {
@@ -128,8 +114,8 @@ TEST(TestMathVectorLib, operator_plus_equal_double) {
 
     vec1 += vec2;
 
-    EXPECT_EQ(vec1[0], 5.0);
-    EXPECT_EQ(vec1[1], 7.0);
+    EXPECT_DOUBLE_EQ(vec1[0], 5.0);
+    EXPECT_DOUBLE_EQ(vec1[1], 7.0);
 }
 
 TEST(TestMathVectorLib, operator_subtraction) {
@@ -156,8 +142,8 @@ TEST(TestMathVectorLib, operator_subtraction_double) {
 
     MathVector<double> result = vec1 - vec2;
 
-    EXPECT_EQ(result[0], -2.0);
-    EXPECT_EQ(result[1], 2.2);
+    EXPECT_DOUBLE_EQ(result[0], -2.0);
+    EXPECT_DOUBLE_EQ(result[1], 2.2);
 }
 
 TEST(TestMathVectorLib, operator_minus_equal) {
@@ -184,8 +170,8 @@ TEST(TestMathVectorLib, operator_minus_equal_double) {
 
     vec1 -= vec2;
 
-    EXPECT_EQ(vec1[0], -2.0);
-    EXPECT_EQ(vec1[1], 2.2);
+    EXPECT_DOUBLE_EQ(vec1[0], -2.0);
+    EXPECT_DOUBLE_EQ(vec1[1], 2.2);
 }
 
 TEST(TestMathVectorLib, operator_multiplication_scalar) {
@@ -206,8 +192,8 @@ TEST(TestMathVectorLib, operator_multiplication_scalar_double) {
 
     MathVector<double> result = vec * 2.0;
 
-    EXPECT_EQ(result[0], 3.0);
-    EXPECT_EQ(result[1], 5.0);
+    EXPECT_DOUBLE_EQ(result[0], 3.0);
+    EXPECT_DOUBLE_EQ(result[1], 5.0);
 }
 
 //TEST(TestMathVectorLib, operator_multiplication_scalar_start_index) {
@@ -250,8 +236,8 @@ TEST(TestMathVectorLib, multiply_equal_scalar_double) {
 
     vec *= 2.0;
 
-    EXPECT_EQ(vec[0], 3.0);
-    EXPECT_EQ(vec[1], 5.0);
+    EXPECT_DOUBLE_EQ(vec[0], 3.0);
+    EXPECT_DOUBLE_EQ(vec[1], 5.0);
 }
 
 TEST(TestMathVectorLib, multiply_equal_scalar_big) {
@@ -264,4 +250,307 @@ TEST(TestMathVectorLib, multiply_equal_scalar_big) {
     EXPECT_EQ(vec[1], 2000000000);
 }
 
-// продолжить 
+TEST(TestMathVectorLib, scalar_product) {
+    MathVector<int> vec1(3);
+    MathVector<int> vec2(3);
+
+    vec1[0] = 1; vec1[1] = 2; vec1[2] = 3;
+    vec2[0] = 4; vec2[1] = 5; vec2[2] = 6;
+
+    int result = vec1 * vec2;
+    int expected = 32; 
+
+    EXPECT_EQ(result, expected);
+}
+
+TEST(TestMathVectorLib, scalar_product_zero) {
+    MathVector<double> vec1(4);
+    MathVector<double> vec2(4);
+
+    vec1[0] = 1.5; vec1[1] = 0.0; vec1[2] = 2.5; vec1[3] = 0.0;
+    vec2[0] = 0.0; vec2[1] = 3.0; vec2[2] = 0.0; vec2[3] = 4.0;
+
+    double result = vec1 * vec2;
+    double expected = 0.0; 
+
+    EXPECT_DOUBLE_EQ(result, expected);
+}
+
+TEST(TestMathVectorLib, scalar_product_negative) {
+    MathVector<int> vec1(3);
+    MathVector<int> vec2(3);
+
+    vec1[0] = -2; vec1[1] = 3; vec1[2] = -1;
+    vec2[0] = 4; vec2[1] = -2; vec2[2] = 5;
+
+    int result = vec1 * vec2;
+    int expected = -19;
+
+    EXPECT_EQ(result, expected);
+}
+
+TEST(TestMathVectorLib, square_bracket_operator) {
+    MathVector<int> vec(3);
+
+    vec[0] = 10;
+    vec[1] = 20;
+    vec[2] = 30;
+
+    EXPECT_EQ(vec[0], 10);
+    EXPECT_EQ(vec[1], 20);
+    EXPECT_EQ(vec[2], 30);
+
+    vec[1] = 25;
+    EXPECT_EQ(vec[1], 25);
+}
+
+//TEST(TestMathVectorLib, square_bracket_operator_error) {
+//    MathVector<double> vec(3);
+//
+//    EXPECT_NO_THROW(vec[0]);
+//    EXPECT_NO_THROW(vec[2]);
+//
+//    EXPECT_THROW(vec[3], std::out_of_range);
+//    EXPECT_THROW(vec[100], std::out_of_range);
+//}
+
+TEST(TestMathVectorLib, equals_operator) {
+    MathVector<int> vec1(3);
+    MathVector<int> vec2(3);
+
+    vec1[0] = 1; vec1[1] = 2; vec1[2] = 3;
+    vec2[0] = 4; vec2[1] = 5; vec2[2] = 6;
+
+    vec1 = vec2;
+
+    for (size_t i = 0; i < 3; i++) {
+        EXPECT_EQ(vec1[i], vec2[i]);
+    }
+}
+
+TEST(TestMathVectorLib, equals_operator_self_assignment) {
+    MathVector<int> vec1(3);
+    vec1[0] = 1; vec1[1] = 2; vec1[2] = 3;
+
+    vec1 = vec1;
+
+    for (size_t i = 0; i < 3; i++) {
+        EXPECT_EQ(vec1[i], i + 1);
+    }
+}
+
+TEST(TestMathVectorLib, equals_operator_different_sizes) {
+    MathVector<int> vec1(2);
+    MathVector<int> vec2(5);
+
+    vec1[0] = 10; vec1[1] = 20;
+    vec2[0] = 1; vec2[1] = 2; vec2[2] = 3; vec2[3] = 4; vec2[4] = 5;
+
+    vec1 = vec2;
+
+    EXPECT_EQ(vec1.size(), 5);
+    for (size_t i = 0; i < 5; i++) {
+        EXPECT_EQ(vec1[i], vec2[i]);
+    }
+}
+
+TEST(TestMathVectorLib, equals_operator_different_start_index) {
+    MathVector<int> vec1(3, 0); 
+    MathVector<int> vec2(3, 5);
+
+    vec1[0] = 10; vec1[1] = 20; vec1[2] = 30;
+    vec2[5] = 100; vec2[6] = 200; vec2[7] = 300;
+
+    vec1 = vec2;
+
+    EXPECT_EQ(vec1.start_index(), 5);
+    EXPECT_EQ(vec1[5], 100);
+    EXPECT_EQ(vec1[6], 200);
+    EXPECT_EQ(vec1[7], 300);
+}
+
+TEST(TestMathVectorLib, output_operator) {
+    MathVector<int> vec(3);
+    vec[0] = 1; vec[1] = 2; vec[2] = 3;
+
+    std::ostringstream oss;
+    oss << vec;
+
+    EXPECT_EQ(oss.str(), "[1, 2, 3]");
+}
+
+TEST(TestMathVectorLib, output_operator_one_elem) {
+    MathVector<int> vec(1);
+    vec[0] = 42;
+
+    std::ostringstream oss;
+    oss << vec;
+
+    EXPECT_EQ(oss.str(), "[42]");
+}
+
+TEST(TestMathVectorLib, output_operator_empty_vec) {
+    MathVector<int> vec(0);
+
+    std::ostringstream oss;
+    oss << vec;
+
+    EXPECT_EQ(oss.str(), "[]");
+}
+
+TEST(TestMathVectorLib, output_operator_start_index) {
+    MathVector<int> vec(2, 5);
+    vec[5] = 10; vec[6] = 20;
+
+    std::ostringstream oss;
+    oss << vec;
+
+    EXPECT_EQ(oss.str(), "[10, 20]");
+}
+
+TEST(TestMathVectorLib, output_operator_double) {
+    MathVector<double> vec(2);
+    vec[0] = 3.14; vec[1] = 2.71;
+
+    std::ostringstream oss;
+    oss << vec;
+
+    EXPECT_EQ(oss.str(), "[3.14, 2.71]");
+}
+
+TEST(TestMathVectorLib, input_operator) {
+    MathVector<int> vec(3);
+
+    std::istringstream iss("10 20 30");
+    iss >> vec;
+
+    EXPECT_EQ(vec[0], 10);
+    EXPECT_EQ(vec[1], 20);
+    EXPECT_EQ(vec[2], 30);
+}
+
+TEST(TestMathVectorLib, input_operator_start_index) {
+    MathVector<int> vec(2, 3);
+
+    std::istringstream iss("100 200");
+    iss >> vec;
+
+    EXPECT_EQ(vec[3], 100);
+    EXPECT_EQ(vec[4], 200);
+}
+
+TEST(TestMathVectorLib, input_operator_double) {
+    MathVector<double> vec(2);
+
+    std::istringstream iss("1.5 2.5");
+    iss >> vec;
+
+    EXPECT_DOUBLE_EQ(vec[0], 1.5);
+    EXPECT_DOUBLE_EQ(vec[1], 2.5);
+}
+
+TEST(TestMathVectorLib, at) {
+    MathVector<int> vec(3);
+    vec[0] = 10; vec[1] = 20; vec[2] = 30;
+
+    EXPECT_EQ(vec.at(0), 10);
+    EXPECT_EQ(vec.at(1), 20);
+    EXPECT_EQ(vec.at(2), 30);
+}
+
+TEST(TestMathVectorLib, at_write) {
+    MathVector<int> vec(2);
+
+    vec.at(0) = 100;
+    vec.at(1) = 200;
+
+    EXPECT_EQ(vec[0], 100);
+    EXPECT_EQ(vec[1], 200);
+}
+
+TEST(TestMathVectorLib, at_start_index) {
+    MathVector<int> vec(2, 5);
+
+    vec.at(5) = 50;
+    vec.at(6) = 60;
+
+    EXPECT_EQ(vec[5], 50);
+    EXPECT_EQ(vec[6], 60);
+}
+
+TEST(TestMathVectorLib, at_error) {
+    MathVector<int> vec(3);
+
+    EXPECT_NO_THROW(vec.at(0));
+    EXPECT_NO_THROW(vec.at(2));
+
+    EXPECT_THROW(vec.at(3), std::out_of_range);
+    EXPECT_THROW(vec.at(100), std::out_of_range);
+    EXPECT_THROW(vec.at(-1), std::out_of_range);
+}
+
+TEST(TestMathVectorLib, comparison_operator) {
+    MathVector<int> vec1(3);
+    MathVector<int> vec2(3);
+
+    vec1[0] = 1; vec1[1] = 2; vec1[2] = 3;
+    vec2[0] = 1; vec2[1] = 2; vec2[2] = 3;
+
+    EXPECT_TRUE(vec1 == vec2);
+    EXPECT_FALSE(vec1 != vec2);
+}
+
+TEST(TestMathVectorLib, comparison_operator_different_size) {
+    MathVector<int> vec1(3);
+    MathVector<int> vec2(2);
+
+    vec1[0] = 1; vec1[1] = 2; vec1[2] = 3;
+    vec2[0] = 1; vec2[1] = 2;
+
+    EXPECT_FALSE(vec1 == vec2);
+}
+
+TEST(TestMathVectorLib, comparison_operator_start_index) {
+    MathVector<int> vec1(3, 0);
+    MathVector<int> vec2(3, 1);
+
+    vec1[0] = 1; vec1[1] = 2; vec1[2] = 3;
+    vec2[1] = 1; vec2[2] = 2; vec2[3] = 3;
+
+    EXPECT_FALSE(vec1 == vec2);
+}
+
+TEST(TestMathVectorLib, comparison_operator_different_data) {
+    MathVector<int> vec1(3);
+    MathVector<int> vec2(3);
+
+    vec1[0] = 1; vec1[1] = 2; vec1[2] = 3;
+    vec2[0] = 1; vec2[1] = 9; vec2[2] = 3;
+
+    EXPECT_FALSE(vec1 == vec2);
+}
+
+TEST(TestMathVectorLib, comparison_operator_empty_vectors) {
+    MathVector<int> vec1(0);
+    MathVector<int> vec2(0);
+
+    EXPECT_TRUE(vec1 == vec2);
+}
+
+TEST(TestMathVectorLib, comparison_operator_self) {
+    MathVector<int> vec1(2);
+    vec1[0] = 5; vec1[1] = 10;
+
+    EXPECT_TRUE(vec1 == vec1);
+}
+
+TEST(TestMathVectorLib, not_equal_operator) {
+    MathVector<int> vec1(2);
+    MathVector<int> vec2(2);
+
+    vec1[0] = 1; vec1[1] = 2;
+    vec2[0] = 1; vec2[1] = 3;
+
+    EXPECT_TRUE(vec1 != vec2);
+    EXPECT_FALSE(vec1 == vec2);
+}

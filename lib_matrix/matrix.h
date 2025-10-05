@@ -17,7 +17,7 @@ public:
 	Matrix<T>& operator+=(const Matrix<T>& other);
 
 	Matrix<T> operator-(const Matrix<T>& other) const;
-	Matrix<T>& operator-=(const Matrix<T>& matr);
+	Matrix<T>& operator-=(const Matrix<T>& other);
 
 	Matrix<T> operator*(T val) const;
 	Matrix<T>& operator*=(T val);
@@ -27,12 +27,16 @@ public:
 	Matrix<T> operator*(const Matrix<T>& matr) const;
 
 	Matrix<T>& operator=(const MathVector<T>& vector); 
-	Matrix<T>& operator=(const Matrix<T>& vector);
+	Matrix<T>& operator=(const Matrix<T>& matr);
 
 	MathVector<T>& operator[](size_t index);
 	const MathVector<T>& Matrix<T>::operator[](size_t index) const;
 
-	//добавить at
+	T& at(size_t i, size_t j);
+	const T& at(size_t i, size_t j) const;
+
+	bool operator==(const Matrix<T>& other) const;
+	bool operator!=(const Matrix<T>& other) const;
 
 	size_t get_n();
 	size_t get_m();
@@ -41,15 +45,13 @@ public:
 
 	void input_matrix(size_t N, size_t M);
 	void print_matrix() const;
-private:
-	bool is_valid_matrix() const;
 };
 
 template<typename T>
 Matrix<T>::Matrix() : MathVector<MathVector<T>>(0), _N(0), _M(0) {}
 
 template<typename T>
-Matrix<T>::Matrix(size_t N, size_t M) : MathVector<MathVector<T>>(N), _N(N), _M(M) { // не должен выделять память
+Matrix<T>::Matrix(size_t N, size_t M) : MathVector<MathVector<T>>(N), _N(N), _M(M) { 
 	for (size_t i = 0; i < N; i++) {
 		(*this)[i] = MathVector<T>(_M);
 	}
@@ -59,7 +61,7 @@ template<typename T>
 Matrix<T>::Matrix(const Matrix<T>& other) : MathVector<MathVector<T>>(other), _N(other._N), _M(other._M) {}
 
 template <typename T>
-Matrix <T>::Matrix(const MathVector <MathVector <T>>& vec) : MathVector <MathVector <T>>(vec), _N(vec.size()), _M(_N > 0 ? vec[0].size() : 0) {}
+Matrix <T>::Matrix(const MathVector<MathVector<T>>& vec) : MathVector<MathVector<T>>(vec), _N(vec.size()), _M(_N > 0 ? vec[0].size() : 0) {}
 
 template<typename T>
 Matrix<T> Matrix<T>::operator+(const Matrix<T>& other) const {
@@ -143,7 +145,7 @@ Matrix<T>& Matrix<T>::operator=(const Matrix<T>& other) {
 
 template<typename T>
 Matrix<T>& Matrix<T>::operator=(const MathVector<T>& vec) {
-	_N = vec.get_size();
+	_N = vec.size();
 	_M = 1;
 
 	MathVector<MathVector<T>>::resize(_N);
@@ -163,6 +165,36 @@ MathVector<T>& Matrix<T>::operator[](size_t index) {
 template<typename T>
 const MathVector<T>& Matrix<T>::operator[](size_t index) const {
 	return MathVector<MathVector<T>>::operator[](index);
+}
+
+template<typename T>
+T& Matrix<T>::at(size_t i, size_t j) {
+	if (i >= _N || j >= _M) {
+		throw std::out_of_range("Matrix indices out of range");
+	}
+	return (*this)[i][j];
+}
+
+template<typename T>
+const T& Matrix<T>::at(size_t i, size_t j) const {
+	if (i >= _N || j >= _M) {
+		throw std::out_of_range("Matrix indices out of range");
+	}
+	return (*this)[i][j];
+}
+
+template<typename T>
+bool Matrix<T>::operator==(const Matrix<T>& other) const {
+	if (_N != other._N || _M != other._M) {
+		return false;
+	}
+
+	return MathVector<MathVector<T>>::operator==(other);
+}
+
+template<typename T>
+bool Matrix<T>::operator!=(const Matrix<T>& other) const {
+	return !(*this == other);
 }
 
 template<typename T>

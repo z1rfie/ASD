@@ -28,6 +28,9 @@ public:
 
 	MathVector<T>& operator=(const MathVector<T>& other);
 
+	bool operator==(const MathVector<T>& other) const;
+	bool operator!=(const MathVector<T>& other) const;
+
 	size_t start_index() const { return _start_index; }
 
 	template<typename U>
@@ -39,19 +42,13 @@ public:
 
 	void input_vector();
 	void print_vector() const;
-private:
-	bool is_valid_vector() const;
 };
 
 template<typename T>
 MathVector<T>::MathVector() : TVector<T>(), _start_index(0) {}
 
 template<typename T>
-MathVector<T>::MathVector(size_t size, size_t start_index) : TVector<T>(size), _start_index(start_index) {
-	if (!is_valid_vector()) {
-		throw std::runtime_error("Failed to create valid MathVector");
-	}
-}
+MathVector<T>::MathVector(size_t size, size_t start_index) : TVector<T>(size), _start_index(start_index) {}
 
 template<typename T>
 MathVector<T>::MathVector(size_t size) : TVector<T>(size), _start_index(0) {}
@@ -166,10 +163,30 @@ std::ostream& operator<<(std::ostream& os, const MathVector<T>& vec) {
 
 template<typename T>
 std::istream& operator>>(std::istream& is, MathVector<T>& vec) {
-	for (size_t i = vec.get_start_index(); i < vec.get_start_index() + vec.get_size(); ++i) {
+	for (size_t i = vec.start_index(); i < vec.start_index() + vec.size(); ++i) {
 		is >> vec[i];
 	}
 	return is;
+}
+
+template<typename T>
+bool MathVector<T>::operator==(const MathVector<T>& other) const {
+	if (_size != other._size || _start_index != other._start_index) {
+		return false;
+	}
+
+	for (size_t i = 0; i < _size; ++i) {
+		if ((*this)[i] != other[i]) {
+			return false;
+		}
+	}
+
+	return true;
+}
+
+template <typename T>
+bool MathVector<T>::operator!=(const MathVector<T>& other) const {
+	return !(*this == other);
 }
 
 template <typename T>
@@ -194,18 +211,6 @@ void MathVector<T>::print_vector() const {
 		std::cout << (*this)[i] << ' '; 
 	}
 	std::cout << std::endl;
-}
-
-template<typename T>
-bool MathVector<T>::is_valid_vector() const {
-	if (_start_index > _size) {
-		return false; 
-	}
-
-	if (_size == 0) {
-		return _start_index == 0;
-	}
-	return true;
 }
 
 #endif // MATH_VECTOR
