@@ -5,6 +5,7 @@
 
 template<typename T>
 class Matrix : public MathVector<MathVector<T>> {
+protected:
 	size_t _N;
 	size_t _M;
 public:
@@ -30,7 +31,7 @@ public:
 	Matrix<T>& operator=(const Matrix<T>& matr);
 
 	MathVector<T>& operator[](size_t index);
-	const MathVector<T>& Matrix<T>::operator[](size_t index) const;
+	const MathVector<T>& operator[](size_t index) const;
 
 	T& at(size_t i, size_t j);
 	const T& at(size_t i, size_t j) const;
@@ -38,8 +39,8 @@ public:
 	bool operator==(const Matrix<T>& other) const;
 	bool operator!=(const Matrix<T>& other) const;
 
-	size_t get_n();
-	size_t get_m();
+	size_t get_n() const;
+	size_t get_m() const;
 
 	void transposition_matrix();
 
@@ -198,10 +199,10 @@ bool Matrix<T>::operator!=(const Matrix<T>& other) const {
 }
 
 template<typename T>
-size_t Matrix<T>::get_n() { return _N; }
+size_t Matrix<T>::get_n() const { return _N; }
 
 template<typename T>
-size_t Matrix<T>::get_m() { return _M; }
+size_t Matrix<T>::get_m() const { return _M; }
 
 template<typename T>
 void Matrix<T>::transposition_matrix() {
@@ -236,8 +237,8 @@ void Matrix<T>::input_matrix(size_t N, size_t M) {
 
 template<typename T>
 void Matrix<T>::print_matrix() const {
-	for (size_t i = 0; i < _N; ++i) {
-		for (size_t j = 0; j < _M; ++j) {
+	for (size_t i = 0; i < _N; i++) {
+		for (size_t j = 0; j < _M; j++) {
 			std::cout << (*this)[i][j] << " ";  
 		}
 		std::cout << std::endl;

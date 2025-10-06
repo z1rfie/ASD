@@ -32,6 +32,7 @@ public:
 	bool operator!=(const MathVector<T>& other) const;
 
 	size_t start_index() const { return _start_index; }
+	void set_start_index(size_t index) { _start_index = index; }
 
 	template<typename U>
 	friend std::ostream& operator<<(std::ostream& os, const MathVector<T>& vec);
