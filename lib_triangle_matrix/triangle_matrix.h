@@ -1,5 +1,6 @@
 #define TRIANGLE_MATRIX
 #ifdef TRIANGLE_MATRIX
+#include "../lib_matrix/matrix.h"
 
 template<typename T>
 class TriangleMatrix : public Matrix<T> {
@@ -18,11 +19,8 @@ public:
 	TriangleMatrix<T> operator*(T val) const;
 	TriangleMatrix<T>& operator*=(T val);
 
-	MathVector<T> operator*(const MathVector<T>& vec) const;
-
 	TriangleMatrix<T> operator*(const TriangleMatrix<T>& matr) const;
 
-	TriangleMatrix<T>& operator=(const MathVector<T>& vector);
 	TriangleMatrix<T>& operator=(const TriangleMatrix<T>& matr);
 
 	MathVector<T>& operator[](size_t index);
@@ -138,21 +136,6 @@ TriangleMatrix<T>& TriangleMatrix<T>::operator*=(T val) {
 }
 
 template<typename T>
-MathVector<T> TriangleMatrix<T>::operator*(const MathVector<T>& vec) const {
-	MathVector<T> result(this->_N);
-
-	for (size_t i = 0; i < this->_N; i++) {
-		result[i] = T(0); 
-
-		for (size_t j = i; j < this->_N; j++) {
-			result[i] += (*this)[i][j] * vec[j];
-		}
-	}
-
-	return result;
-}
-
-template<typename T>
 TriangleMatrix<T> TriangleMatrix<T>::operator*(const TriangleMatrix<T>& matr) const {
 	size_t n = this->_N;
 	TriangleMatrix<T> result(n);
@@ -179,29 +162,6 @@ TriangleMatrix<T>& TriangleMatrix<T>::operator=(const TriangleMatrix<T>& other) 
 		_M = other._M;
 		MathVector<MathVector<T>>::operator=(other);
 	}
-	return *this;
-}
-
-template<typename T>
-TriangleMatrix<T>& TriangleMatrix<T>::operator=(const MathVector<T>& vec) {
-	size_t n = vec.size();
-
-	this->resize(n, n);
-
-	size_t vec_index = 0;
-	for (size_t i = 0; i < n; i++) {
-		(*this)[i] = MathVector<T>(n - i, i);
-
-		for (size_t j = i; j < n; j++) {
-			if (vec_index < vec.size()) {
-				(*this)[i][j] = vec[vec_index++];
-			}
-			else {
-				(*this)[i][j] = T(0); 
-			}
-		}
-	}
-
 	return *this;
 }
 
