@@ -19,6 +19,7 @@ add_subdirectory(lib_tvector)
 add_subdirectory(lib_math_vector)
 add_subdirectory(lib_matrix)
 add_subdirectory(lib_triangle_matrix)
+add_subdirectory(lib_algorithms)
 
 option(BTEST "build test?" ON)        # указываем подключаем ли google-тесты (ON или YES) или нет (OFF или NO)
 
