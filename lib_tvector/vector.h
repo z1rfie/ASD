@@ -53,9 +53,11 @@ public:
     size_t size() const noexcept;
 
     inline bool is_empty() const noexcept;
+    inline bool is_full() const noexcept;
 
     inline T& front();
     inline T& back();
+    const inline T& back() const;
 
     inline T* begin() noexcept;
     inline T* end() noexcept;
@@ -105,9 +107,7 @@ public:
 
     friend void hoara_sort_rec<T>(const TVector<T>& vec, int left, int right);
     friend void hoara_sort<T>(const TVector<T>& vec);
-
 private:
-    inline bool is_full() const noexcept;
     void allocate_memory(size_t);
     void reallocate_memory(size_t);
     void reallocate_memory_for_delete();
@@ -217,6 +217,18 @@ inline T& TVector<T>::front() {
 
 template<class T>
 inline T& TVector<T>::back() {
+    if (_size == 0) {
+        throw std::logic_error("There are no busy elements");
+    }
+    for (size_t i = _size; i > 0; --i) {
+        if (_states[i - 1] == busy) {
+            return _data[i - 1];
+        }
+    }
+}
+
+template<class T>
+const inline T& TVector<T>::back() const {
     if (_size == 0) {
         throw std::logic_error("There are no busy elements");
     }
