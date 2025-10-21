@@ -1,5 +1,7 @@
-#define TVECTOR
-#ifdef TVECTOR
+//#define TVECTOR
+//#ifdef TVECTOR
+
+#pragma once
 
 #include <cstddef> // size_t
 #include <stdlib.h> 
@@ -56,6 +58,7 @@ public:
     inline bool is_full() const noexcept;
 
     inline T& front();
+    const inline T& front() const;
     inline T& back();
     const inline T& back() const;
 
@@ -205,6 +208,18 @@ size_t TVector<T>::size() const noexcept { return _size - _deleted; }
 
 template<class T>
 inline T& TVector<T>::front() {
+    if (_size == 0) {
+        throw std::logic_error("There are no busy elements");
+    }
+    for (size_t i = 0; i < _size; i++) {
+        if (_states[i] == busy) {
+            return _data[i];
+        }
+    }
+}
+
+template<class T>
+const inline T& TVector<T>::front() const {
     if (_size == 0) {
         throw std::logic_error("There are no busy elements");
     }
@@ -1098,4 +1113,4 @@ void hoara_sort(const TVector<T>& vec) {
     hoara_sort_rec(vec, 0, vec._size);
 }
 
-#endif // TVECTOR
+//#endif // TVECTOR

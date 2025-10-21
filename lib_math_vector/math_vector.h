@@ -1,5 +1,8 @@
-#define MATH_VECTOR
-#ifdef MATH_VECTOR
+//#define MATH_VECTOR
+//#ifdef MATH_VECTOR
+
+#pragma once
+
 #include "../lib_tvector/vector.h"
 
 template<typename T> 
@@ -153,18 +156,17 @@ const T& MathVector<T>::operator[](size_t index) const {
 
 template<typename T>
 std::ostream& operator<<(std::ostream& os, const MathVector<T>& vec) {
-	os << '[';
-	for (size_t i = vec.start_index(); i < vec.start_index() + vec.size(); ++i) {
+	for (size_t i = vec.start_index(); i < vec.start_index() + vec.size(); i++) {
 		os << vec[i];
 		if (i + 1 < vec.start_index() + vec.size())
-			os << ", ";
+			os << " ";
 	}
-	return os << ']';
+	return os;
 }
 
 template<typename T>
 std::istream& operator>>(std::istream& is, MathVector<T>& vec) {
-	for (size_t i = vec.start_index(); i < vec.start_index() + vec.size(); ++i) {
+	for (size_t i = vec.start_index(); i < vec.start_index() + vec.size(); i++) {
 		is >> vec[i];
 	}
 	return is;
@@ -199,19 +201,19 @@ T& MathVector<T>::at(size_t pos) {
 	return _data[pos - _start_index];
 }
 
-template<typename T>
-void MathVector<T>::input_vector() {
-	for (size_t i = 0; i < _size; i++) {
-		std::cin >> (*this)[i];
-	}
-}
+//template<typename T>
+//void MathVector<T>::input_vector() {
+//	for (size_t i = 0; i < _size; i++) {
+//		std::cin >> (*this)[i];
+//	}
+//}
+//
+//template<typename T>
+//void MathVector<T>::print_vector() const {
+//	for (size_t i = 0; i < _size; i++) {
+//		std::cout << (*this)[i] << ' '; 
+//	}
+//	std::cout << std::endl;
+//}
 
-template<typename T>
-void MathVector<T>::print_vector() const {
-	for (size_t i = 0; i < _size; i++) {
-		std::cout << (*this)[i] << ' '; 
-	}
-	std::cout << std::endl;
-}
-
-#endif // MATH_VECTOR
+//#endif // MATH_VECTOR

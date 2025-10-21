@@ -3,7 +3,7 @@
 
 #include "../lib_tvector/vector.h"
 
-template<class T>
+template<typename T>
 class Stack {
 	TVector<T> _data; 
 public:
@@ -20,13 +20,15 @@ public:
 	void clear() noexcept; //1 тест
 };
 
-template<class T>
-Stack<T>::Stack(size_t size) : _data(size) {}
+template<typename T>
+Stack<T>::Stack(size_t size) : _data(0) {
+	_data.reserve(size);
+}
 
-template<class T>
+template<typename T>
 Stack<T>::Stack(const Stack& other) : _data(other._data) {}
 
-template<class T>
+template<typename T>
 void Stack<T>::push(T val) {
 	if (is_full()) {
 		throw std::runtime_error("Cannot be inserted into a filled stack");
@@ -35,7 +37,7 @@ void Stack<T>::push(T val) {
 	_data.push_back_elem(val);
 }
 
-template<class T>
+template<typename T>
 void Stack<T>::pop() {
 	if (is_empty()) {
 		throw std::runtime_error("Cannot be removed from an empty stack");
@@ -44,7 +46,7 @@ void Stack<T>::pop() {
 	_data.pop_back_elem();
 }
 
-template<class T>
+template<typename T>
 T Stack<T>::top() const {
 	if (is_empty()) {
 		throw std::runtime_error("There are no elements");
@@ -53,17 +55,17 @@ T Stack<T>::top() const {
 	return _data.back();
 }
 
-template<class T>
+template<typename T>
 inline bool Stack<T>::is_full() const noexcept {
 	return _data.is_full();
 }
 
-template<class T>
+template<typename T>
 inline bool Stack<T>::is_empty() const noexcept {
 	return _data.is_empty();
 }
 
-template<class T>
+template<typename T>
 void Stack<T>::clear() noexcept {
 	_data.clear();
 }

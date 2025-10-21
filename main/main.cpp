@@ -3,6 +3,7 @@
 
 #include "../lib_matrix/matrix.h"
 #include "../lib_triangle_matrix/triangle_matrix.h"
+
 #include <iostream>
 #include <cstdlib>
 
@@ -51,7 +52,7 @@ void regular_matrix_operations_menu() {
     std::cin >> N1 >> M1;
     Matrix<int> first_matrix(N1, M1);
     std::cout << std::endl << "Enter the matrix elements: " << std::endl;
-    first_matrix.input_matrix(N1,M1);
+    std::cin >> first_matrix;
 
     system("pause");
 
@@ -59,7 +60,7 @@ void regular_matrix_operations_menu() {
         system("cls");
         std::cout << std::endl << "\t MATRIX OPERATIONS \t" << std::endl;
         std::cout << std::endl << "-- Your matrix: --" << std::endl;
-        first_matrix.print_matrix();
+        std::cout << first_matrix;
         std::cout << std::endl;
         std::cout << "1. Addition" << std::endl;
         std::cout << "2. Subtraction" << std::endl;
@@ -93,7 +94,7 @@ void regular_matrix_operations_menu() {
 
 			if (choice > 0 && choice < 3) {
 				std::cout << std::endl << "Enter the elements of the second matrix:" << std::endl;
-				second_matrix.input_matrix(N2,M2);
+				std::cin >> second_matrix;
 			}
 
 			switch (choice) {
@@ -115,7 +116,7 @@ void regular_matrix_operations_menu() {
 				std::cout << std::endl << "Transposition result:" << std::endl;
 				break;
 			}
-			first_matrix.print_matrix();
+			std::cout << first_matrix;
 			system("pause");
 			break;
 		}
@@ -165,7 +166,7 @@ void regular_multiplication_menu(Matrix<T>& matrix) {
         MathVector<int> vector(vector_size);
 
         std::cout << "Enter vector elements:" << std::endl;
-        vector.input_vector();
+        std::cin >> vector;
 
         matrix = matrix * vector;
         break;
@@ -185,7 +186,7 @@ void regular_multiplication_menu(Matrix<T>& matrix) {
 		}
 
 		Matrix<int> second_matrix(N2, M2);
-		second_matrix.input_matrix(N2,M2);
+		std::cin >> second_matrix;
 		matrix = matrix * second_matrix;
 		break;
     }
@@ -200,7 +201,7 @@ void triangular_matrices_menu() {
     std::cin >> first_size;
     TriangleMatrix<int> first_matrix(first_size);
     std::cout << std::endl << "Enter the matrix elements: ";
-    first_matrix.input_triangle(first_size);
+    std::cin >> first_matrix;
 
     system("pause");
 
@@ -208,7 +209,7 @@ void triangular_matrices_menu() {
         system("cls");
         std::cout << std::endl << "\t TRIANGLE MATRIX OPERATIONS \t" << std::endl;
         std::cout << std::endl << "-- Your matrix: --" << std::endl;
-        first_matrix.print_triangle();
+        std::cout << first_matrix;
         std::cout << std::endl;
         std::cout << "1. Addition" << std::endl;
         std::cout << "2. Subtraction" << std::endl;
@@ -241,20 +242,20 @@ void triangular_matrices_menu() {
 
             if (choice > 0 && choice < 3) {
                 std::cout << std::endl << "Enter the elements of the second matrix:" << std::endl;
-                second_matrix.input_triangle(second_size);
+                std::cin >> second_matrix;
             }
 
             switch (choice) {
             case 1:
                 first_matrix = first_matrix + second_matrix;
                 std::cout << std::endl << "Result of addition:" << std::endl;
-                first_matrix.print_triangle();
+                std::cout << first_matrix;
                 system("pause");
                 break;
             case 2:
                 first_matrix = first_matrix - second_matrix;
                 std::cout << std::endl << "Result of subtraction:" << std::endl;
-                first_matrix.print_triangle();
+                std::cout << first_matrix;
                 system("pause");
                 break;
             case 3:
@@ -279,13 +280,14 @@ void triangular_multiplication_menu(TriangleMatrix<T>& matrix) {
     std::cout << std::endl << "\t MULTIPLICATION \t" << std::endl;
     std::cout << std::endl;
     std::cout << "1. Multiply by scalar" << std::endl;
-    std::cout << "2. Multiply by matrix" << std::endl;
-    std::cout << "3. Back" << std::endl;
+    std::cout << "2. Multiply by vector" << std::endl;
+    std::cout << "3. Multiply by matrix" << std::endl;
+    std::cout << "4. Back" << std::endl;
     std::cout << std::endl;
     std::cout << "Choose option (1-3): ";
     std::cin >> choice;
 
-    if (choice == 3) return;
+    if (choice == 4) return;
 
     switch (choice) {
     case 1: {
@@ -296,6 +298,30 @@ void triangular_multiplication_menu(TriangleMatrix<T>& matrix) {
         break;
     }
     case 2: {
+        size_t vector_size;
+        while (1) {
+            std::cout << "Enter vector size: ";
+            std::cin >> vector_size;
+
+            if (first_size == vector_size) {
+                break;
+            }
+
+            std::cout << "Matrix columns (" << first_size << ") must match vector size (" << vector_size << ")!" << std::endl;
+            std::cout << "Please try again." << std::endl;
+        }
+
+        MathVector<int> vector(vector_size);
+
+        std::cout << "Enter vector elements:" << std::endl;
+        std::cin >> vector;
+
+        vector = matrix * vector;
+        std::cout << "Vector elements:" << std::endl;
+        std::cout << vector << std::endl;
+        break;
+    }
+    case 3: {
         size_t second_size;
 
         while (1) {
@@ -310,7 +336,7 @@ void triangular_multiplication_menu(TriangleMatrix<T>& matrix) {
         }
 
         TriangleMatrix<int> second_matrix(second_size);
-        second_matrix.input_triangle(second_size);
+        std::cin >> second_matrix;
         matrix = matrix * second_matrix;
         break;
     }
@@ -325,3 +351,49 @@ void vectors_menu() {
 }
 
 #endif // MATRIX
+
+//#define LIB_STACK
+#ifdef LIB_STACK
+
+#include <iostream>
+#include <stack>
+
+bool balanced(const std::string& s) {
+    std::stack<char> stack;
+    for (char c : s) {
+        switch (c) {
+
+        case '(': stack.push(')'); break;
+        case '[': stack.push(']'); break;
+        case '{': stack.push('}'); break;
+        case '<': stack.push('>'); break;
+
+        case ')':
+        case ']':
+        case '}':
+        case '>':
+            if (stack.empty() || stack.top() != c) {
+                return false;
+            }
+            stack.pop();
+            break;
+        default:
+            break;
+        }
+    }
+    return stack.empty();
+}
+
+void test(const std::string& s) {
+    std::cout << '"' << s << "\" " << (balanced(s) ? "yes" : "no") << '\n';
+}
+
+int main() {
+    test("");
+    test("a(b[c]d)e");
+    test("a(b[c)d]e");
+    test("a(b[c]d");
+    test("b[c]d)e");
+}
+
+#endif // LIB_STACK

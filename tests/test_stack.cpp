@@ -4,7 +4,7 @@
 #include <gtest/gtest.h>
 
 TEST(TestStackLib, init_constructor) {
-    Stack<int> stack(5);
+    Stack<int> stack(4);
 
     EXPECT_TRUE(stack.is_empty());
     EXPECT_FALSE(stack.is_full());

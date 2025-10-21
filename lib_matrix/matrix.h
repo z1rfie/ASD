@@ -1,7 +1,9 @@
-#define MATRIX
-#ifdef MATRIX
+//#define MATRIX
+//#ifdef MATRIX
+
+#pragma once
+
 #include "../lib_math_vector/math_vector.h"
-#include <iostream>
 
 template<typename T>
 class Matrix : public MathVector<MathVector<T>> {
@@ -44,8 +46,14 @@ public:
 
 	void transposition_matrix();
 
-	void input_matrix(size_t N, size_t M);
-	void print_matrix() const;
+	template<typename U>
+	friend std::istream& operator>>(std::istream& is, Matrix<U>& matrix);
+
+	template<typename U>
+	friend std::ostream& operator<<(std::ostream& os, const Matrix<U>& matrix);
+
+	/*void input_matrix(size_t N, size_t M);
+	void print_matrix() const;*/
 };
 
 template<typename T>
@@ -208,40 +216,61 @@ template<typename T>
 void Matrix<T>::transposition_matrix() {
 	Matrix<T> transposed(_M, _N);
 
-	for (size_t i = 0; i < _N; i++) {
-		for (size_t j = 0; j < _M; j++) {
-			transposed[j][i] = (*this)[i][j];
+	for (size_t i = 0; i < _M; i++) {
+		for (size_t j = 0; j < _N; j++) {
+			transposed[i][j] = (*this)[j][i];
 		}
 	}
-
-	size_t temp = _N;
-	_N = _M;
-	_M = temp;
 
 	*this = transposed;
 }
 
 template<typename T>
-void Matrix<T>::input_matrix(size_t N, size_t M) {
-	this->resize(N, M);
+std::istream& operator>>(std::istream& is, Matrix<T>& matrix) {
+	size_t N = matrix.get_n();
+	size_t M = matrix.get_m();
+
 	for (size_t i = 0; i < N; i++) {
 		std::cout << "Row " << i + 1 << ": ";
 		MathVector<T> row_vector(M);
-		row_vector.input_vector();
+		is >> row_vector;
 
 		for (size_t j = 0; j < M; j++) {
-			(*this)[i][j] = row_vector[j];  
+			matrix[i][j] = row_vector[j];
 		}
 	}
+	return is;
 }
 
 template<typename T>
-void Matrix<T>::print_matrix() const {
-	for (size_t i = 0; i < _N; i++) {
-		for (size_t j = 0; j < _M; j++) {
-			std::cout << (*this)[i][j] << " ";  
-		}
-		std::cout << std::endl;
+std::ostream& operator<<(std::ostream& os, const Matrix<T>& matrix) {
+	for (size_t i = 0; i < matrix.get_n(); i++) {
+		os << matrix[i] << std::endl;  
 	}
+	return os;
 }
-#endif // MATRIX
+
+//template<typename T>
+//void Matrix<T>::input_matrix(size_t N, size_t M) {
+//	this->resize(N, M);
+//	for (size_t i = 0; i < N; i++) {
+//		std::cout << "Row " << i + 1 << ": ";
+//		MathVector<T> row_vector(M);
+//		row_vector.input_vector();
+//
+//		for (size_t j = 0; j < M; j++) {
+//			(*this)[i][j] = row_vector[j];  
+//		}
+//	}
+//}
+//
+//template<typename T>
+//void Matrix<T>::print_matrix() const {
+//	for (size_t i = 0; i < _N; i++) {
+//		for (size_t j = 0; j < _M; j++) {
+//			std::cout << (*this)[i][j] << " ";  
+//		}
+//		std::cout << std::endl;
+//	}
+//}
+//#endif // MATRIX
