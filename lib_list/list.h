@@ -21,6 +21,7 @@ public:
 
 	Node<T>* head();
 	Node<T>* tail();
+	size_t count();
 
 	bool is_empty();
 
@@ -40,11 +41,11 @@ public:
 template <class T>
 List<T>::List() : _head(nullptr), _tail(nullptr), _count(0) {}
 
-template <class T>
+template<typename T>
 List<T>::List(const List<T>& other) : _head(nullptr), _tail(nullptr), _count(0) {
 	Node<T>* current = other._head;
 	while (current != nullptr) {
-		push_back(current->value);  
+		push_back(current->value); 
 		current = current->next;
 	}
 }
@@ -68,6 +69,9 @@ template <class T>
 Node<T>* List<T>::tail() { return _tail; }
 
 template <class T>
+size_t  List<T>::count() { return _count; }
+
+template <class T>
 bool List<T>::is_empty() {
 	return _head == nullptr;
 }
@@ -86,24 +90,24 @@ void List<T>::push_front(const T& value) noexcept {
 	_count++;
 }
 
-template <class T>
-void List<T>::push_front(const T& value) noexcept {
-	Node<T>* node = new Node<T>(value, _head); 
-	if (is_empty()) {
-		_tail = node;
-	}
-	_head = node;
-
-	_count++;
-}
+//template <class T>
+//void List<T>::push_front(const T& value) noexcept {
+//	Node<T>* node = new Node<T>(value, _head); 
+//	if (is_empty()) {
+//		_tail = node;
+//	}
+//	_head = node;
+//
+//	_count++;
+//}
 
 template <class T>
 void List<T>::push_back(const T& value) noexcept {
-	Node<T>* node = new Node<T>(value, _head);
+	Node<T>* node = new Node<T>(value, nullptr);
+
 	if (is_empty()) {
 		_head = node;
 		_tail = node;
-		return;
 	}
 	_tail->next = node;
 	_tail = node;
@@ -113,7 +117,7 @@ void List<T>::push_back(const T& value) noexcept {
 
 template <class T>
 void List<T>::insert(Node<T>* node, const T& val) { // вставляем после объекта на который указываем
-	if (node == nullptr || is_empty()) throw ...;
+	if (node == nullptr || is_empty()) throw std::invalid_argument("Node cannot be null or list is empty");
 	Node<T>* new_node = new Node<T>(val);
 	new_node->next = node->next;
 	node->next = new_node;
@@ -143,14 +147,14 @@ void List<T>::insert(size_t pos, const T& value) {  // позиция начинается с 0
 		cur_pos++;
 		cur = cur->next;
 	}
-	if (cur == nullptr) throw ...;
+	if (cur == nullptr) throw std::invalid_argument("Node cannot be null");
 
 	_count++;
 }
 
 template <class T>
 void List<T>::pop_front() {
-	if (is_empty()) throw ...;
+	if (is_empty()) throw std::runtime_error("Cannot pop from empty list");
 	if (_head == _tail) {
 		delete _head;
 		_head = nullptr;
@@ -166,7 +170,7 @@ void List<T>::pop_front() {
 
 template <class T>
 void List<T>::pop_back() {
-	if (is_empty()) throw ...;
+	if (is_empty()) throw std::runtime_error("Cannot pop from empty list");
 	if (_head == _tail) {
 		delete _head;
 		_head = nullptr;

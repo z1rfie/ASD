@@ -1,21 +1,19 @@
 ﻿#include <gtest/gtest.h>
 #include "triangle_matrix.h"
 
-// Конструкторы
-TEST(TriangleMatrix, DefaultConstructor) {
+TEST(TestTriangleMatrix, default_constructor) {
     TriangleMatrix<int> mat;
     EXPECT_EQ(mat.get_n(), 0);
     EXPECT_EQ(mat.get_m(), 0);
 }
 
-TEST(TriangleMatrix, SizeConstructor) {
+TEST(TestTriangleMatrix, size_constructor) {
     TriangleMatrix<int> mat(3);
     EXPECT_EQ(mat.get_n(), 3);
     EXPECT_EQ(mat.get_m(), 3);
 }
 
-// Оператор []
-TEST(TriangleMatrix, IndexOperator) {
+TEST(TestTriangleMatrix, index_operator) {
     TriangleMatrix<int> mat(2);
     mat[0][0] = 1;
     mat[0][1] = 2;
@@ -26,27 +24,25 @@ TEST(TriangleMatrix, IndexOperator) {
     EXPECT_EQ(mat[1][1], 3);
 }
 
-TEST(TriangleMatrix, ConstIndexOperator) {
+TEST(TestTriangleMatrix, const_index_operator) {
     TriangleMatrix<int> mat(2);
     mat[0][0] = 5;
     const TriangleMatrix<int>& const_mat = mat;
     EXPECT_EQ(const_mat[0][0], 5);
 }
 
-// Метод at
-TEST(TriangleMatrix, AtMethod) {
+TEST(TestTriangleMatrix, at) {
     TriangleMatrix<int> mat(2);
     mat.at(0, 0) = 5;
     EXPECT_EQ(mat.at(0, 0), 5);
 }
 
-TEST(TriangleMatrix, AtMethodOutOfRange) {
+TEST(TestTriangleMatrix, at_error) {
     TriangleMatrix<int> mat(2);
     EXPECT_THROW(mat.at(5, 5), std::out_of_range);
 }
 
-// Оператор +
-TEST(TriangleMatrix, Addition) {
+TEST(TestTriangleMatrix, addition) {
     TriangleMatrix<int> mat1(2);
     TriangleMatrix<int> mat2(2);
 
@@ -62,8 +58,7 @@ TEST(TriangleMatrix, Addition) {
     EXPECT_EQ(result[1][1], 9);
 }
 
-// Оператор +=
-TEST(TriangleMatrix, AdditionAssignment) {
+TEST(TestTriangleMatrix, addition_assignment) {
     TriangleMatrix<int> mat1(2);
     TriangleMatrix<int> mat2(2);
 
@@ -75,15 +70,14 @@ TEST(TriangleMatrix, AdditionAssignment) {
     EXPECT_EQ(mat1[0][1], 6);
 }
 
-TEST(TriangleMatrix, AdditionAssignmentSelf) {
+TEST(TestTriangleMatrix, addition_assignment_self) {
     TriangleMatrix<int> mat(2);
     mat[0][0] = 1;
     mat += mat;
     EXPECT_EQ(mat[0][0], 2);
 }
 
-// Оператор -
-TEST(TriangleMatrix, Subtraction) {
+TEST(TestTriangleMatrix, subtraction) {
     TriangleMatrix<int> mat1(2);
     TriangleMatrix<int> mat2(2);
 
@@ -95,7 +89,7 @@ TEST(TriangleMatrix, Subtraction) {
     EXPECT_EQ(result[0][1], 4);
 }
 
-TEST(TriangleMatrix, SubtractionNegativeResult) {
+TEST(TestTriangleMatrix, subtraction_negative_result) {
     TriangleMatrix<int> mat1(2);
     TriangleMatrix<int> mat2(2);
 
@@ -106,8 +100,7 @@ TEST(TriangleMatrix, SubtractionNegativeResult) {
     EXPECT_EQ(result[0][0], -2);
 }
 
-// Оператор -=
-TEST(TriangleMatrix, SubtractionAssignment) {
+TEST(TestTriangleMatrix, subtraction_assignment) {
     TriangleMatrix<int> mat1(2);
     TriangleMatrix<int> mat2(2);
 
@@ -118,15 +111,14 @@ TEST(TriangleMatrix, SubtractionAssignment) {
     EXPECT_EQ(mat1[0][0], 7);
 }
 
-TEST(TriangleMatrix, SubtractionAssignmentZero) {
+TEST(TestTriangleMatrix, subtraction_assignmentZero) {
     TriangleMatrix<int> mat(2);
     mat[0][0] = 5;
     mat -= mat;
     EXPECT_EQ(mat[0][0], 0);
 }
 
-// Оператор * (скаляр)
-TEST(TriangleMatrix, ScalarMultiplication) {
+TEST(TestTriangleMatrix, scalar_multiplication) {
     TriangleMatrix<int> mat(2);
     mat[0][0] = 2; mat[0][1] = 3;
     mat[1][1] = 4;
@@ -137,30 +129,28 @@ TEST(TriangleMatrix, ScalarMultiplication) {
     EXPECT_EQ(result[1][1], 12);
 }
 
-TEST(TriangleMatrix, ScalarMultiplicationZero) {
+TEST(TestTriangleMatrix, scalar_multiplication_zero) {
     TriangleMatrix<int> mat(2);
     mat[0][0] = 5;
     TriangleMatrix<int> result = mat * 0;
     EXPECT_EQ(result[0][0], 0);
 }
 
-// Оператор *= (скаляр)
-TEST(TriangleMatrix, ScalarMultiplicationAssignment) {
+TEST(TestTriangleMatrix, scalar_multiplication_assignment) {
     TriangleMatrix<int> mat(2);
     mat[0][0] = 2;
     mat *= 4;
     EXPECT_EQ(mat[0][0], 8);
 }
 
-TEST(TriangleMatrix, ScalarMultiplicationAssignmentOne) {
+TEST(TestTriangleMatrix, acalar_multiplication_assignment_one) {
     TriangleMatrix<int> mat(2);
     mat[0][0] = 5;
     mat *= 1;
     EXPECT_EQ(mat[0][0], 5);
 }
 
-// Оператор * (матрица)
-TEST(TriangleMatrix, MatrixMultiplication) {
+TEST(TriangleMatrix, matrix_multiplication) {
     TriangleMatrix<int> mat1(2);
     TriangleMatrix<int> mat2(2);
 
@@ -171,12 +161,12 @@ TEST(TriangleMatrix, MatrixMultiplication) {
     mat2[1][1] = 6;
 
     TriangleMatrix<int> result = mat1 * mat2;
-    EXPECT_EQ(result[0][0], 4);   // 1*4
-    EXPECT_EQ(result[0][1], 17);  // 1*5 + 2*6
-    EXPECT_EQ(result[1][1], 18);  // 3*6
+    EXPECT_EQ(result[0][0], 4);
+    EXPECT_EQ(result[0][1], 17);
+    EXPECT_EQ(result[1][1], 18);
 }
 
-TEST(TriangleMatrix, MatrixMultiplicationIdentity) {
+TEST(TestTriangleMatrix, matrix_multiplication_identity) {
     TriangleMatrix<int> mat(2);
     TriangleMatrix<int> identity(2);
 
@@ -192,8 +182,7 @@ TEST(TriangleMatrix, MatrixMultiplicationIdentity) {
     EXPECT_EQ(result[1][1], 3);
 }
 
-// Оператор * (вектор)
-TEST(TriangleMatrix, VectorMultiplication) {
+TEST(TestTriangleMatrix, vector_multiplication) {
     TriangleMatrix<int> mat(2);
     MathVector<int> vec(2);
 
@@ -203,18 +192,17 @@ TEST(TriangleMatrix, VectorMultiplication) {
     vec[0] = 4; vec[1] = 5;
 
     MathVector<int> result = mat * vec;
-    EXPECT_EQ(result[0], 14);  // 1*4 + 2*5
-    EXPECT_EQ(result[1], 15);  // 3*5
+    EXPECT_EQ(result[0], 14);
+    EXPECT_EQ(result[1], 15);
 }
 
-TEST(TriangleMatrix, VectorMultiplicationWrongSize) {
+TEST(TriangleMatrix, vector_multiplication_wrong_size) {
     TriangleMatrix<int> mat(2);
     MathVector<int> vec(3);
     EXPECT_THROW(mat * vec, std::invalid_argument);
 }
 
-// Оператор ==
-TEST(TriangleMatrix, EqualityOperator) {
+TEST(TestTriangleMatrix, equality_operator) {
     TriangleMatrix<int> mat1(2);
     TriangleMatrix<int> mat2(2);
 
@@ -222,7 +210,7 @@ TEST(TriangleMatrix, EqualityOperator) {
     EXPECT_TRUE(mat1 == mat2);
 }
 
-TEST(TriangleMatrix, EqualityOperatorDifferent) {
+TEST(TestTriangleMatrix, equality_operator_different) {
     TriangleMatrix<int> mat1(2);
     TriangleMatrix<int> mat2(2);
 
@@ -230,8 +218,7 @@ TEST(TriangleMatrix, EqualityOperatorDifferent) {
     EXPECT_FALSE(mat1 == mat2);
 }
 
-// Оператор !=
-TEST(TriangleMatrix, InequalityOperator) {
+TEST(TestTriangleMatrix, inequality_operator) {
     TriangleMatrix<int> mat1(2);
     TriangleMatrix<int> mat2(2);
 
@@ -239,7 +226,7 @@ TEST(TriangleMatrix, InequalityOperator) {
     EXPECT_TRUE(mat1 != mat2);
 }
 
-TEST(TriangleMatrix, InequalityOperatorSame) {
+TEST(TestTriangleMatrix, inequality_operatorSame) {
     TriangleMatrix<int> mat1(2);
     TriangleMatrix<int> mat2(2);
 
@@ -247,8 +234,7 @@ TEST(TriangleMatrix, InequalityOperatorSame) {
     EXPECT_FALSE(mat1 != mat2);
 }
 
-// Оператор =
-TEST(TriangleMatrix, AssignmentOperator) {
+TEST(TestTriangleMatrix, assignment_operator) {
     TriangleMatrix<int> mat1(2);
     TriangleMatrix<int> mat2(2);
 
@@ -257,7 +243,7 @@ TEST(TriangleMatrix, AssignmentOperator) {
     EXPECT_EQ(mat2[0][0], 5);
 }
 
-TEST(TriangleMatrix, AssignmentOperatorSelf) {
+TEST(TestTriangleMatrix, assignment_operator_self) {
     TriangleMatrix<int> mat(2);
     mat[0][0] = 5;
     mat = mat;
