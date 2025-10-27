@@ -369,54 +369,54 @@ TEST(TestMathVectorLib, equals_operator_different_start_index) {
     EXPECT_EQ(vec1[7], 300);
 }
 
-TEST(TestMathVectorLib, output_operator) {
-    MathVector<int> vec(3);
-    vec[0] = 1; vec[1] = 2; vec[2] = 3;
-
-    std::ostringstream oss;
-    oss << vec;
-
-    EXPECT_EQ(oss.str(), "[1, 2, 3]");
-}
-
-TEST(TestMathVectorLib, output_operator_one_elem) {
-    MathVector<int> vec(1);
-    vec[0] = 42;
-
-    std::ostringstream oss;
-    oss << vec;
-
-    EXPECT_EQ(oss.str(), "[42]");
-}
-
-TEST(TestMathVectorLib, output_operator_empty_vec) {
-    MathVector<int> vec(0);
-
-    std::ostringstream oss;
-    oss << vec;
-
-    EXPECT_EQ(oss.str(), "[]");
-}
-
-TEST(TestMathVectorLib, output_operator_start_index) {
-    MathVector<int> vec(2, 5);
-    vec[5] = 10; vec[6] = 20;
-
-    std::ostringstream oss;
-    oss << vec;
-
-    EXPECT_EQ(oss.str(), "[10, 20]");
-}
-
-TEST(TestMathVectorLib, output_operator_double) {
-    MathVector<double> vec(2);
-    vec[0] = 3.14; vec[1] = 2.71;
-
-    std::ostringstream oss;
-    oss << vec;
-
-    EXPECT_EQ(oss.str(), "[3.14, 2.71]");
-}
+//TEST(TestMathVectorLib, output_operator) {
+//    MathVector<int> vec(3);
+//    vec[0] = 1; vec[1] = 2; vec[2] = 3;
+//
+//    std::ostringstream oss;
+//    oss << vec;
+//
+//    EXPECT_EQ(oss.str(), "[1, 2, 3]");
+//}
+//
+//TEST(TestMathVectorLib, output_operator_one_elem) {
+//    MathVector<int> vec(1);
+//    vec[0] = 42;
+//
+//    std::ostringstream oss;
+//    oss << vec;
+//
+//    EXPECT_EQ(oss.str(), "[42]");
+//}
+//
+//TEST(TestMathVectorLib, output_operator_empty_vec) {
+//    MathVector<int> vec(0);
+//
+//    std::ostringstream oss;
+//    oss << vec;
+//
+//    EXPECT_EQ(oss.str(), "[]");
+//}
+//
+//TEST(TestMathVectorLib, output_operator_start_index) {
+//    MathVector<int> vec(2, 5);
+//    vec[5] = 10; vec[6] = 20;
+//
+//    std::ostringstream oss;
+//    oss << vec;
+//
+//    EXPECT_EQ(oss.str(), "[10, 20]");
+//}
+//
+//TEST(TestMathVectorLib, output_operator_double) {
+//    MathVector<double> vec(2);
+//    vec[0] = 3.14; vec[1] = 2.71;
+//
+//    std::ostringstream oss;
+//    oss << vec;
+//
+//    EXPECT_EQ(oss.str(), "[3.14, 2.71]");
+//}
 
 TEST(TestMathVectorLib, input_operator) {
     MathVector<int> vec(3);

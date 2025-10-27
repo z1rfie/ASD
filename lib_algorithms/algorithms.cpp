@@ -1,45 +1,71 @@
 #include "../lib_algorithms/algorithms.h"
 
-//template<typename T>
-//T find_local_min(const Matrix<T>& matr, size_t start_i, size_t start_j) {
-//    if (matr.get_n() != matr.get_m()) {
-//        throw std::logic_error("Matrix must be square!");
-//    }
-//    if (start_i >= matr.get_n() || start_j >= matr.get_n()) {
-//        throw std::out_of_range("Start position out of matrix bounds!");
-//    }
-//
-//    size_t i = start_i;
-//    size_t j = start_j;
-//
-//    int di[] = { -1, 1, 0, 0 };
-//    int dj[] = { 0, 0, -1, 1 };
-//
-//    while (1) {
-//        T current_val = matr[i][j];
-//        size_t best_i = i;
-//        size_t best_j = j;
-//        T best_val = current_val;
-//
-//        for (int dir = 0; dir < 4; dir++) {
-//            int ni = i + di[dir];
-//            int nj = j + dj[dir];
-//
-//            if (ni >= 0 && ni < matr.get_n() && nj >= 0 && nj < matr.get_n()) {
-//                T neighbor_val = matr[ni][nj];
-//                if (neighbor_val < best_val) {
-//                    best_val = neighbor_val;
-//                    best_i = ni;
-//                    best_j = nj;
-//                }
-//            }
-//        }
-//
-//        if (best_val >= current_val) {
-//            return current_val;
-//        }
-//
-//        i = best_i;
-//        j = best_j;
-//    }
-//}
+bool check_breckets(std::string str) {
+    Stack<char> stack(str.length());
+    for (char c : str) {
+        switch (c) {
+        case '(':
+            stack.push(')');
+            break;
+        case '{':
+            stack.push('}');
+            break;
+        case '[':
+            stack.push(']');
+            break;
+        case '<':
+            stack.push('>');
+            break;
+        case ')':
+        case '}':
+        case ']':
+        case '>':
+            if (stack.is_empty() || stack.top() != c) {
+                return false;
+            }
+            stack.pop();
+            break;
+        default:
+            break;
+        }
+    }
+    return stack.is_empty();
+}
+
+void read_expression(std::string expression) {
+    Stack<char> stack(expression.length());
+    for (char c : expression) {
+        switch (c) {
+        case '(':
+            stack.push(')');
+            break;
+        case '{':
+            stack.push('}');
+            break;
+        case '[':
+            stack.push(']');
+            break;
+        case '<':
+            stack.push('>');
+            break;
+        case ')':
+        case '}':
+        case ']':
+        case '>':
+            if (stack.is_empty()) {
+                throw std::invalid_argument("Missing opened brecket");
+            }
+            if (stack.top() != c) {
+                throw std::invalid_argument("Missing closed brecket");
+            }
+            stack.pop();
+            break;
+        default:
+            break;
+        }
+        if (!stack.is_empty()) {
+            throw std::invalid_argument("Missing opening brackets");
+        }
+
+    }
+}

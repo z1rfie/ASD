@@ -1,7 +1,12 @@
 #define ALGORITHMS
 #ifdef ALGORITHMS
 #include "../lib_matrix/matrix.h"
+#include "../lib_stack/stack.h"
 #include <iostream>
+
+bool check_breckets(std::string str);
+
+void read_expression(std::string expression);
 
 template<typename T>
 T find_local_min(const Matrix<T>& matr, size_t start_i, size_t start_j) {
