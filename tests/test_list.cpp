@@ -140,3 +140,21 @@ TEST(TestListLib, count) {
 	list.pop_front();
 	EXPECT_EQ(list.count(), 1);
 }
+
+TEST(TestListLib, iterator_read) {
+	List<int> list;
+
+	for (int i = 0; i < 10; i++) {
+		list.push_back(i * 3 + 1);
+	}
+
+	int i = 0;
+	List<int>::Iterator it;
+	for (it = list.begin(); it != list.end(); it++) {
+		//std::cout << *it << " ";
+		EXPECT_EQ(*it, i*3 + 1);
+		*it = i++;
+		
+	}
+	
+}
