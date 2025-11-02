@@ -224,11 +224,6 @@
 			throw std::out_of_range("Position out of range");
 		}
 
-		if (pos == 0) {
-			pop_front();
-			return;
-		}
-
 		Node<T>* cur = _head;
 		for (size_t i = 0; i < pos - 1; i++) {
 			cur = cur->next;
