@@ -39,3 +39,52 @@ TEST(TestAlgorithmsLib, test_find_local_min_error_index) {
 
     EXPECT_THROW(find_local_min(matr, 3, 3), std::exception);
 }
+
+TEST(TestAlgorithmsLib, test_read_expression) {
+    std::string first = "3 * (15 + (x + y) * (2*x - 7*y^2))";
+    EXPECT_NO_THROW(read_expression(first));
+
+    std::string second = "3*(15+(x y)*(2*x - 7*y^2))";
+    EXPECT_THROW(read_expression(second), std::invalid_argument);
+
+    std::string third = "3*(15+(x+y)*(2*x - 7*y^))";
+    EXPECT_THROW(read_expression(third), std::invalid_argument);
+
+    std::string fourth = "3*(15+(x+y)))*(2*x - 7*y^2))";
+    EXPECT_THROW(read_expression(fourth), std::invalid_argument);
+}
+
+TEST(TestAlgorithmsLib, test_read_expression_message) {
+    std::string first = "3 * (15 + (x + y) * (2*x - 7*y^2))";
+    EXPECT_NO_THROW(read_expression(first));
+
+    std::string second = "3*(15+(x y)*(2*x - 7*y^2))";
+    try {
+        read_expression(second);
+        FAIL() << "Expected exception for: " << second;
+    }
+    catch (const std::invalid_argument& e) {
+        std::cout << "Exception for '" << second << "': " << e.what() << std::endl;
+        EXPECT_TRUE(std::string(e.what()).find("Missing operation") != std::string::npos);
+    }
+
+    std::string third = "3*(15+(x+y)*(2*x - 7*y^))";
+    try {
+        read_expression(third);
+        FAIL() << "Expected exception for: " << third;
+    }
+    catch (const std::invalid_argument& e) {
+        std::cout << "Exception for '" << third << "': " << e.what() << std::endl;
+        EXPECT_TRUE(std::string(e.what()).find("Missing operand") != std::string::npos);
+    }
+
+    std::string fourth = "3*(15+(x+y)))*(2*x - 7*y^2))";
+    try {
+        read_expression(fourth);
+        FAIL() << "Expected exception for: " << fourth;
+    }
+    catch (const std::invalid_argument& e) {
+        std::cout << "Exception for '" << fourth << "': " << e.what() << std::endl;
+        EXPECT_TRUE(std::string(e.what()).find("Missing opened bracket") != std::string::npos);
+    }
+}
