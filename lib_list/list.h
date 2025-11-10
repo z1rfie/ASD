@@ -93,6 +93,7 @@
 		}
 		_head = nullptr;
 		_tail = nullptr;
+		_count = 0;
 	}
 
 	template <class T>

@@ -51,6 +51,54 @@ public:
 
     ~TVector();
 
+    class Iterator {
+    private:
+        T* _ptr;
+        State* _states;
+        size_t _size;
+        size_t _current;
+
+    public:
+        Iterator(T* data, State* states, size_t size, size_t pos = 0)
+            : _ptr(data), _states(states), _size(size), _current(pos) {
+            while (_current < _size && _states[_current] != busy) {
+                _current++;
+            }
+        }
+
+        T& operator*() const {
+            return _ptr[_current];
+        }
+
+        T* operator->() const {
+            return &_ptr[_current];
+        }
+
+        Iterator& operator++() {
+            _current++;
+            while (_current < _size && _states[_current] != busy) {
+                _current++;
+            }
+            return *this;
+        }
+
+        Iterator operator++(int) {
+            Iterator temp = *this;
+            ++(*this);
+            return temp;
+        }
+
+        Iterator& operator=(const Iterator& other) = default;
+
+        bool operator==(const Iterator& other) const {
+            return _current == other._current;
+        }
+
+        bool operator!=(const Iterator& other) const {
+            return _current != other._current;
+        }
+    };
+
     size_t capacity() const noexcept;
     size_t size() const noexcept;
 
@@ -62,8 +110,8 @@ public:
     inline T& back();
     const inline T& back() const;
 
-    inline T* begin() noexcept;
-    inline T* end() noexcept;
+    Iterator begin() noexcept { return Iterator(_data, _states, _size, 0); }
+    Iterator end() noexcept { return Iterator(nullptr, nullptr, _size, _size); }
 
     inline const T* data() const noexcept;
     inline const State* states() const noexcept;
@@ -254,19 +302,19 @@ const inline T& TVector<T>::back() const {
     }
 }
 
-template<class T>
-inline T* TVector<T>::begin() noexcept {
-    for (size_t i = 0; i < _size; i++) {
-        if (_states[i] == busy) {
-            return _data[i];
-        }
-    }
-}
-
-template<class T>
-inline T* TVector<T>::end() noexcept {
-    return _data + _size;
-}
+//template<class T>
+//inline T* TVector<T>::begin() noexcept {
+//    for (size_t i = 0; i < _size; i++) {
+//        if (_states[i] == busy) {
+//            return _data[i];
+//        }
+//    }
+//}
+//
+//template<class T>
+//inline T* TVector<T>::end() noexcept {
+//    return _data + _size;
+//}
 
 template<class T>
 inline bool TVector<T>::is_empty() const noexcept {

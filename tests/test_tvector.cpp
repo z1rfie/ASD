@@ -1351,3 +1351,44 @@ TEST(TestTVectorLib, pop_back_elems_with_deleted) {
         EXPECT_EQ(vec.states()[i], expected_states[i]);
     }
 }
+
+TEST(TestTVectorLib, iterator_read) {
+    TVector<int> vec;
+
+    for (int i = 0; i < 5; i++) {
+        vec.push_back_elem(i * 3 + 1);
+    }
+
+    int expected_values[5] = { 1, 4, 7, 10, 13 };
+
+    int index = 0;
+    for (auto it = vec.begin(); it != vec.end(); ++it) {
+        EXPECT_EQ(*it, expected_values[index++]);
+    }
+}
+
+TEST(TestTVectorLib, iterator_write) {
+    TVector<int> vec;
+
+    int new_value = 100;
+    for (auto it = vec.begin(); it != vec.end(); ++it) {
+        *it = new_value++;
+    }
+
+    int expected_values[5] = { 100, 101, 102, 103, 104 };
+
+    int index = 0;
+    for (auto it = vec.begin(); it != vec.end(); ++it) {
+        EXPECT_EQ(*it, expected_values[index++]);
+    }
+}
+
+TEST(TestTVectorLib, iterate_empty_list) {
+    TVector<int> vec;
+
+    int iterations = 0;
+    for (auto it = vec.begin(); it != vec.end(); ++it) {
+        iterations++;
+    }
+    EXPECT_EQ(iterations, 0);
+}
