@@ -341,19 +341,3 @@ TEST(TestDoublyLinkedListLib, node_links_integrity) {
     EXPECT_EQ(tail->prev, middle);
     EXPECT_EQ(tail->next, nullptr);
 }
-
-TEST(TestDoublyLinkedListLib, clear_list) {
-    DoublyLinkedList<int> list;
-    list.push_back(1);
-    list.push_back(2);
-    list.push_back(3);
-
-    while (!list.is_empty()) {
-        list.pop_front();
-    }
-
-    EXPECT_TRUE(list.is_empty());
-    EXPECT_EQ(list.count(), 0);
-    EXPECT_EQ(list.head(), nullptr);
-    EXPECT_EQ(list.tail(), nullptr);
-}

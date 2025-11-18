@@ -88,3 +88,28 @@ TEST(TestAlgorithmsLib, test_read_expression_message) {
         EXPECT_TRUE(std::string(e.what()).find("Missing opened bracket") != std::string::npos);
     }
 }
+
+TEST(TestAlgorithmsLib, test_is_looped) {
+    List<int> list;
+
+    for (int i = 0; i < 5; i++) {
+        list.push_back(i);
+    }
+
+    Node<int>* node = list.tail();
+    node->next = list.head()->next;
+
+    EXPECT_TRUE(is_looped(list));
+
+    node->next = nullptr;
+}
+
+TEST(TestAlgorithmsLib, test_is_looped_false) {
+    List<int> list;
+
+    for (int i = 0; i < 5; i++) {
+        list.push_back(i);
+    }
+
+    EXPECT_FALSE(is_looped(list));
+}

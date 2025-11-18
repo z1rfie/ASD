@@ -34,6 +34,10 @@
 				return _current != other._current;
 			}
 
+			bool operator==(const Iterator& other) const {
+				return _current == other._current;
+			}
+
 			Iterator& operator++() { // ++it
 				_current = _current->next;  
 				return *this;

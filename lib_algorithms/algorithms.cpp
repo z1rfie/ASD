@@ -113,3 +113,22 @@ void read_expression(std::string expression) {
         throw std::invalid_argument("Missing second operand");
     }
 }
+
+//template<typename T>
+//bool is_looped(List<T> list) {
+//    List<T>::Iterator it1 = list.begin();
+//    List<T>::Iterator it2 = list.begin();
+//
+//    int speed1 = 0, speed2 = 0;
+//
+//    while (it1 != list.end() || it2 != list.end()) {
+//        it1 = ++speed1;
+//        it2 = speed2 + 2;
+//    }
+//    
+//    if (it1 == it2) {
+//        return true;
+//    }
+//
+//    return false;
+//}

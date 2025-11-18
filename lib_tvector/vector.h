@@ -54,31 +54,16 @@ public:
     class Iterator {
     private:
         T* _ptr;
-        State* _states;
-        size_t _size;
-        size_t _current;
 
     public:
-        Iterator(T* data, State* states, size_t size, size_t pos = 0)
-            : _ptr(data), _states(states), _size(size), _current(pos) {
-            while (_current < _size && _states[_current] != busy) {
-                _current++;
-            }
-        }
+        Iterator(T* p) : _ptr(p) {}
 
         T& operator*() const {
-            return _ptr[_current];
-        }
-
-        T* operator->() const {
-            return &_ptr[_current];
+            return *_ptr;
         }
 
         Iterator& operator++() {
-            _current++;
-            while (_current < _size && _states[_current] != busy) {
-                _current++;
-            }
+            ++_ptr;
             return *this;
         }
 
@@ -91,11 +76,11 @@ public:
         Iterator& operator=(const Iterator& other) = default;
 
         bool operator==(const Iterator& other) const {
-            return _current == other._current;
+            return _ptr == other._ptr;
         }
 
         bool operator!=(const Iterator& other) const {
-            return _current != other._current;
+            return _ptr != other._ptr;
         }
     };
 
@@ -110,8 +95,8 @@ public:
     inline T& back();
     const inline T& back() const;
 
-    Iterator begin() noexcept { return Iterator(_data, _states, _size, 0); }
-    Iterator end() noexcept { return Iterator(nullptr, nullptr, _size, _size); }
+    Iterator begin() noexcept { return Iterator(_data); }
+    Iterator end() noexcept { return Iterator(_data + _size); }
 
     inline const T* data() const noexcept;
     inline const State* states() const noexcept;

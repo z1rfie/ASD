@@ -2,11 +2,29 @@
 #ifdef ALGORITHMS
 #include "../lib_matrix/matrix.h"
 #include "../lib_stack/stack.h"
+#include "../lib_list/list.h"
 #include <iostream>
 
 bool check_breckets(std::string str);
 
 void read_expression(std::string expression);
+
+template<typename T>
+bool is_looped(List<T>& list) {
+    List<T>::Iterator it1 = list.begin();
+    List<T>::Iterator it2 = list.begin();
+
+    ++it2;
+    while (it2 != list.end()) {
+        if (it1 == it2) {
+            return true;
+        }
+        ++it1;
+        ++it2; ++it2;
+    }
+
+    return false;
+}
 
 template<typename T>
 T find_local_min(const Matrix<T>& matr, size_t start_i, size_t start_j) {
