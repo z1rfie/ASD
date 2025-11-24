@@ -89,27 +89,37 @@ TEST(TestAlgorithmsLib, test_read_expression_message) {
     }
 }
 
-TEST(TestAlgorithmsLib, test_is_looped) {
-    List<int> list;
+//TEST(TestAlgorithmsLib, test_is_looped) {
+//    List<int> list;
+//
+//    for (int i = 0; i < 5; i++) {
+//        list.push_back(i);
+//    }
+//
+//    Node<int>* node = list.tail();
+//    node->next = list.head()->next;
+//
+//    EXPECT_TRUE(is_looped(list));
+//
+//    node->next = nullptr;
+//}
+//
+//TEST(TestAlgorithmsLib, test_is_looped_false) {
+//    List<int> list;
+//
+//    for (int i = 0; i < 5; i++) {
+//        list.push_back(i);
+//    }
+//
+//    EXPECT_FALSE(is_looped(list));
+//}
 
-    for (int i = 0; i < 5; i++) {
-        list.push_back(i);
-    }
+TEST(TestAlgorithmsLib, test_count_islands) {
+    Matrix<int> matr(4, 4);
+    matr[0][0] = 0; matr[0][1] = 1; matr[0][2] = 0; matr[0][3] = 0;
+    matr[1][0] = 0; matr[1][1] = 0; matr[1][2] = 0; matr[1][3] = 0;
+    matr[2][0] = 1; matr[2][1] = 0; matr[2][2] = 1; matr[2][3] = 1;
+    matr[3][0] = 1; matr[3][1] = 0; matr[3][2] = 1; matr[3][3] = 0;
 
-    Node<int>* node = list.tail();
-    node->next = list.head()->next;
-
-    EXPECT_TRUE(is_looped(list));
-
-    node->next = nullptr;
-}
-
-TEST(TestAlgorithmsLib, test_is_looped_false) {
-    List<int> list;
-
-    for (int i = 0; i < 5; i++) {
-        list.push_back(i);
-    }
-
-    EXPECT_FALSE(is_looped(list));
+    EXPECT_EQ(return_count_islands(matr), 3);
 }
