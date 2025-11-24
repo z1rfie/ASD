@@ -58,6 +58,9 @@
 
 		Node<T>* head();
 		Node<T>* tail();
+
+		const Node<T>* head() const;
+		const Node<T>* tail() const;
 		size_t count();
 
 		bool is_empty() const;
@@ -105,6 +108,12 @@
 
 	template <class T>
 	Node<T>* List<T>::tail() { return _tail; }
+
+	template <class T>
+	const Node<T>* List<T>::head() const { return _head; }
+
+	template <class T>
+	const Node<T>* List<T>::tail() const { return _tail; }
 
 	template <class T>
 	size_t  List<T>::count() { return _count; }

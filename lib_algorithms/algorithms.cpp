@@ -114,21 +114,39 @@ void read_expression(std::string expression) {
     }
 }
 
-//template<typename T>
-//bool is_looped(List<T> list) {
-//    List<T>::Iterator it1 = list.begin();
-//    List<T>::Iterator it2 = list.begin();
-//
-//    int speed1 = 0, speed2 = 0;
-//
-//    while (it1 != list.end() || it2 != list.end()) {
-//        it1 = ++speed1;
-//        it2 = speed2 + 2;
-//    }
-//    
-//    if (it1 == it2) {
-//        return true;
-//    }
-//
-//    return false;
-//}
+int return_count_islands(const Matrix<int>& matr) {
+    int n = matr.get_n();
+    int m = matr.get_m();
+    DSU dsu(n * m);
+
+    int di[] = { -1, 1, 0, 0 };
+    int dj[] = { 0, 0, -1, 1 };
+
+    for (int i = 0; i < n; ++i) {
+        for (int j = 0; j < m; ++j) {
+            if (matr[i][j] == 1) {
+                for (int k = 0; k < 4; ++k) {
+                    int ni = i + di[k];
+                    int nj = j + dj[k];
+
+                    if (ni >= 0 && ni < n && nj >= 0 && nj < m &&
+                        matr[ni][nj] == 1) {
+                        int u = i * m + j;
+                        int v = ni * m + nj;
+
+                        dsu.func_union(u, v);
+                    }
+                }
+            }
+        }
+    }
+
+    int islands = 0;
+    for (int i = 0; i < n * m; ++i) {
+        if (dsu.find(i) == i && matr[i / m][i % m] == 1) {
+            islands++;
+        }
+    }
+
+    return islands;
+}

@@ -24,6 +24,9 @@ add_subdirectory(lib_stack)
 add_subdirectory(lib_queue)
 add_subdirectory(lib_list)
 add_subdirectory(lib_doubly_linked_list)
+add_subdirectory(lib_list_stack)
+add_subdirectory(lib_list_queue)
+add_subdirectory(lib_dsu)
 
 option(BTEST "build test?" ON)        # указываем подключаем ли google-тесты (ON или YES) или нет (OFF или NO)
 
