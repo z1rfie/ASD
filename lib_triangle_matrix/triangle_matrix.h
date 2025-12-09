@@ -43,9 +43,6 @@ public:
 
 	template<typename U>
 	friend std::ostream& operator<<(std::ostream& os, const TriangleMatrix<U>& matrix);
-
-	/*void input_triangle(size_t size);
-	void print_triangle() const;*/
 };
 
 template<typename T>
@@ -54,7 +51,7 @@ TriangleMatrix<T>::TriangleMatrix() : Matrix<T>(0) {}
 template<typename T>
 TriangleMatrix<T>::TriangleMatrix(size_t size) : Matrix<T>(size, size) {
 	for (size_t i = 0; i < size; i++) {
-		(*this)[i] = MathVector<T>(size - i, i);
+		_data[i] = MathVector<T>(size - i, i);
 	}
 }
 
@@ -69,19 +66,19 @@ TriangleMatrix<T>::TriangleMatrix(const MathVector<MathVector<T>>& vec) : Matrix
 	for (size_t i = 0; i < _N; i++) {
 		for (size_t j = i; j < _N; j++) {
 			if (j < vec[i].size()) {
-				(*this)[i][j] = vec[i][j];
+				_data[i][j] = vec[i][j];
 			}
 		}
 	}
 }
 
 template<typename T>
-TriangleMatrix<T> TriangleMatrix<T>::operator+(const TriangleMatrix<T>& other) const {
-	TriangleMatrix<T> result(this->_N);
+TriangleMatrix<T> TriangleMatrix<T>::operator+(const TriangleMatrix<T>& other) const { 
+	TriangleMatrix<T> result(_N);	
 
 	for (size_t i = 0; i < _N; i++) {
 		for (size_t j = i; j < _N; j++) {
-			result[i][j] = (*this)[i][j] + other[i][j];
+			result[i][j] = _data[i][j] + other[i][j];
 		}
 	}
 
@@ -92,7 +89,7 @@ template<typename T>
 TriangleMatrix<T>& TriangleMatrix<T>::operator+=(const TriangleMatrix<T>& other) {
 	for (size_t i = 0; i < _N; i++) {
 		for (size_t j = i; j < _N; j++) {
-			(*this)[i][j] += other[i][j];
+			_data[i][j] += other[i][j];
 		}
 	}
 
@@ -105,7 +102,7 @@ TriangleMatrix<T> TriangleMatrix<T>::operator-(const TriangleMatrix<T>& other) c
 
 	for (size_t i = 0; i < _N; i++) {
 		for (size_t j = i; j < _N; j++) {
-			result[i][j] = (*this)[i][j] - other[i][j];
+			result[i][j] = _data[i][j] - other[i][j];
 		}
 	}
 
@@ -116,7 +113,7 @@ template<typename T>
 TriangleMatrix<T>& TriangleMatrix<T>::operator-=(const TriangleMatrix<T>& other) {
 	for (size_t i = 0; i < _N; i++) {
 		for (size_t j = i; j < _N; j++) {
-			(*this)[i][j] -= other[i][j];
+			_data[i][j] -= other[i][j];
 		}
 	}
 
@@ -129,7 +126,7 @@ TriangleMatrix<T> TriangleMatrix<T>::operator*(T val) const {
 
 	for (size_t i = 0; i < _N; i++) {
 		for (size_t j = i; j < _N; j++) {
-			result[i][j] = (*this)[i][j] * val;
+			result[i][j] = _data[i][j] * val;
 		}
 	}
 
@@ -140,7 +137,7 @@ template<typename T>
 TriangleMatrix<T>& TriangleMatrix<T>::operator*=(T val) {
 	for (size_t i = 0; i < _N; i++) {
 		for (size_t j = i; j < _N; j++) {
-			(*this)[i][j] *= val;
+			_data[i][j] *= val;
 		}
 	}
 
@@ -156,7 +153,7 @@ TriangleMatrix<T> TriangleMatrix<T>::operator*(const TriangleMatrix<T>& matr) co
 			T sum = T(0);
 
 			for (size_t k = i; k <= j; k++) {
-				sum += (*this)[i][k] * matr[k][j];
+				sum += _data[i][k] * matr[k][j];
 			}
 
 			result[i][j] = sum;
@@ -168,17 +165,17 @@ TriangleMatrix<T> TriangleMatrix<T>::operator*(const TriangleMatrix<T>& matr) co
 
 template<typename T>
 MathVector<T> TriangleMatrix<T>::operator*(const MathVector<T>& vec) const {
-	if (this->_M != vec.size()) {
+	if (_M != vec.size()) {
 		throw std::invalid_argument("Matrix columns must match vector size");
 	}
 
 	MathVector<T> result(_N); 
 
-	for (size_t i = 0; i < this->_N; i++) {
+	for (size_t i = 0; i < _N; i++) {
 		result[i] = T(0); 
 
-		for (size_t j = i; j < this->_M; j++) {
-			result[i] += (*this)[i][j] * vec[j];
+		for (size_t j = i; j < _M; j++) {
+			result[i] += _data[i][j] * vec[j];
 		}
 	}
 
@@ -213,7 +210,7 @@ bool TriangleMatrix<T>::operator==(const TriangleMatrix<T>& other) const {
 
 	for (size_t i = 0; i < _N; i++) {
 		for (size_t j = i; j < _N; j++) {
-			if ((*this)[i][j] != other[i][j]) {
+			if (_data[i][j] != other[i][j]) {
 				return false;
 			}
 		}
@@ -231,7 +228,7 @@ T& TriangleMatrix<T>::at(size_t i, size_t j) {
 	if (i >= _N || j >= _N) {  
 		throw std::out_of_range("TriangleMatrix indices out of range");
 	}
-	return (*this)[i][j];
+	return _data[i][j];
 }
 
 template<typename T>
@@ -239,9 +236,8 @@ const T& TriangleMatrix<T>::at(size_t i, size_t j) const {
 	if (i >= _N || j >= _N) {
 		throw std::out_of_range("TriangleMatrix indices out of range");
 	}
-	return (*this)[i][j];
+	return _data[i][j];
 }
-
 
 template<typename T>
 std::istream& operator>>(std::istream& is, TriangleMatrix<T>& matrix) {
@@ -275,34 +271,5 @@ std::ostream& operator<<(std::ostream& os, const TriangleMatrix<T>& matrix) {
 	}
 	return os;
 }
-
-//template<typename T>
-//void TriangleMatrix<T>::input_triangle(size_t size) {
-//	//this->resize(size, size);
-//
-//	for (size_t i = 0; i < size; i++) {
-//		(*this)[i] = MathVector<T>(size - i, i);
-//
-//		std::cout << "Row " << (i + 1) << ": ";
-//		for (size_t j = i; j < size; j++) {
-//			std::cin >> (*this)[i][j];
-//		}
-//	}
-//}
-//
-//template<typename T>
-//void TriangleMatrix<T>::print_triangle() const {
-//	for (size_t i = 0; i < _N; i++) {
-//		for (size_t j = 0; j < _N; j++) {
-//			if (j >= i) {
-//				std::cout << (*this)[i][j] << " ";
-//			}
-//			else {
-//				std::cout << "0 "; 
-//			}
-//		}
-//		std::cout << std::endl;
-//	}
-//}
 
 //#endif // TRIANGLE_MATRIX

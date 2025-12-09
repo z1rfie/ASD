@@ -51,9 +51,6 @@ public:
 
 	template<typename U>
 	friend std::ostream& operator<<(std::ostream& os, const Matrix<U>& matrix);
-
-	/*void input_matrix(size_t N, size_t M);
-	void print_matrix() const;*/
 };
 
 template<typename T>
@@ -62,7 +59,7 @@ Matrix<T>::Matrix() : MathVector<MathVector<T>>(0), _N(0), _M(0) {}
 template<typename T>
 Matrix<T>::Matrix(size_t N, size_t M) : MathVector<MathVector<T>>(N), _N(N), _M(M) { 
 	for (size_t i = 0; i < N; i++) {
-		(*this)[i] = MathVector<T>(_M);
+		_data[i] = MathVector<T>(_M);
 	}
 }
 
@@ -99,7 +96,7 @@ Matrix<T> Matrix<T>::operator*(T val) const {
 	Matrix<T> result(_N, _M);
 
 	for (size_t i = 0; i < _N; i++) {
-		result[i] = (*this)[i] * val;  
+		result[i] = _data[i] * val;
 	}
 
 	return result;
@@ -108,7 +105,7 @@ Matrix<T> Matrix<T>::operator*(T val) const {
 template<typename T>
 Matrix<T>& Matrix<T>::operator*=(T val) {
 	for (size_t i = 0; i < _N; i++) {
-		(*this)[i] *= val; 
+		_data[i] *= val;
 	}
 
 	return *this;
@@ -120,7 +117,7 @@ MathVector<T> Matrix<T>::operator*(const MathVector<T>& vec) const {
 
 	for (size_t i = 0; i < _N; i++) {
 		for (size_t j = 0; j < _M; j++) {
-			result[i] = (*this)[i] * vec;
+			result[i] = _data[i] * vec;
 		}
 	}
 
@@ -135,7 +132,7 @@ Matrix<T> Matrix<T>::operator*(const Matrix<T>& matr) const {
 
 	for (size_t i = 0; i < _N; i++) {
 		for (size_t j = 0; j < matr._M; j++) {
-			result[i][j] = (*this)[i] * transposed_matr[j];
+			result[i][j] = _data[i] * transposed_matr[j];
 		}
 	}
 
@@ -159,8 +156,8 @@ Matrix<T>& Matrix<T>::operator=(const MathVector<T>& vec) {
 
 	MathVector<MathVector<T>>::resize(_N);
 	for (size_t i = 0; i < _N; i++) {
-		(*this)[i] = MathVector<T>(1); 
-		(*this)[i][0] = vec[i];         
+		_data[i] = MathVector<T>(1);
+		_data[i][0] = vec[i];
 	}
 
 	return *this;
@@ -181,7 +178,7 @@ T& Matrix<T>::at(size_t i, size_t j) {
 	if (i >= _N || j >= _M) {
 		throw std::out_of_range("Matrix indices out of range");
 	}
-	return (*this)[i][j];
+	return _data[i][j];
 }
 
 template<typename T>
@@ -189,7 +186,7 @@ const T& Matrix<T>::at(size_t i, size_t j) const {
 	if (i >= _N || j >= _M) {
 		throw std::out_of_range("Matrix indices out of range");
 	}
-	return (*this)[i][j];
+	return _data[i][j];
 }
 
 template<typename T>
@@ -218,7 +215,7 @@ void Matrix<T>::transposition_matrix() {
 
 	for (size_t i = 0; i < _M; i++) {
 		for (size_t j = 0; j < _N; j++) {
-			transposed[i][j] = (*this)[j][i];
+			transposed[i][j] = _data[j][i];
 		}
 	}
 
@@ -250,27 +247,4 @@ std::ostream& operator<<(std::ostream& os, const Matrix<T>& matrix) {
 	return os;
 }
 
-//template<typename T>
-//void Matrix<T>::input_matrix(size_t N, size_t M) {
-//	this->resize(N, M);
-//	for (size_t i = 0; i < N; i++) {
-//		std::cout << "Row " << i + 1 << ": ";
-//		MathVector<T> row_vector(M);
-//		row_vector.input_vector();
-//
-//		for (size_t j = 0; j < M; j++) {
-//			(*this)[i][j] = row_vector[j];  
-//		}
-//	}
-//}
-//
-//template<typename T>
-//void Matrix<T>::print_matrix() const {
-//	for (size_t i = 0; i < _N; i++) {
-//		for (size_t j = 0; j < _M; j++) {
-//			std::cout << (*this)[i][j] << " ";  
-//		}
-//		std::cout << std::endl;
-//	}
-//}
 //#endif // MATRIX

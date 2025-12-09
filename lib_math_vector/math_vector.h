@@ -43,9 +43,6 @@ public:
 	friend std::istream& operator>>(std::istream& is, MathVector<T>& vec);
 
 	T& at(size_t pos);
-
-	void input_vector();
-	void print_vector() const;
 };
 
 template<typename T>
@@ -65,7 +62,7 @@ MathVector<T> MathVector<T>::operator+(const MathVector<T>& other) const {
 	MathVector<T> result(_size, _start_index);
 
 	for (size_t i = 0; i < _size; i++) {
-		result[i] = (*this)[i] + other[i];
+		result[i] = _data[i] + other[i];
 	}
 
 	return result;
@@ -74,7 +71,7 @@ MathVector<T> MathVector<T>::operator+(const MathVector<T>& other) const {
 template<typename T>
 MathVector<T>& MathVector<T>::operator+=(const MathVector<T>& other) {
 	for (size_t i = 0; i < _size; i++) {
-		(*this)[i] += other[i];
+		_data[i] += other[i];
 	}
 
 	return *this;
@@ -85,7 +82,7 @@ MathVector<T> MathVector<T>::operator-(const MathVector<T>& other) const {
 	MathVector<T> result(_size, _start_index);
 
 	for (size_t i = 0; i < _size; i++) {
-		result[i] = (*this)[i] - other[i];
+		result[i] = _data[i] - other[i];
 	}
 
 	return result;
@@ -94,7 +91,7 @@ MathVector<T> MathVector<T>::operator-(const MathVector<T>& other) const {
 template<typename T>
 MathVector<T>& MathVector<T>::operator-=(const MathVector<T>& other) {
 	for (size_t i = 0; i < _size; i++) {
-		(*this)[i] -= other[i];
+		_data[i] -= other[i];
 	}
 
 	return *this;
@@ -105,7 +102,7 @@ MathVector<T> MathVector<T>::operator*(T val) const {
 	MathVector<T> result(_size, _start_index);
 
 	for (size_t i = 0; i < _size; i++) {
-		result[i] = (*this)[i] * val;
+		result[i] = _data[i] * val;
 	}
 
 	return result;
@@ -114,7 +111,7 @@ MathVector<T> MathVector<T>::operator*(T val) const {
 template<typename T>
 MathVector<T>& MathVector<T>::operator*=(T val) {
 	for (size_t i = 0; i < _size; i++) {
-		(*this)[i] *= val;
+		_data[i] *= val;
 	}
 
 	return *this;
@@ -125,7 +122,7 @@ T MathVector<T>::operator*(MathVector<T> vec) const {
 	T result = T();
 
 	for (size_t i = 0; i < _size; i++) {
-		result += ((*this)[i] * vec[i]);
+		result += (_data[i] * vec[i]);
 	}
 
 	return result;
@@ -179,7 +176,7 @@ bool MathVector<T>::operator==(const MathVector<T>& other) const {
 	}
 
 	for (size_t i = 0; i < _size; ++i) {
-		if ((*this)[i] != other[i]) {
+		if (_data[i] != other[i]) {
 			return false;
 		}
 	}
@@ -200,20 +197,5 @@ T& MathVector<T>::at(size_t pos) {
 
 	return _data[pos - _start_index];
 }
-
-//template<typename T>
-//void MathVector<T>::input_vector() {
-//	for (size_t i = 0; i < _size; i++) {
-//		std::cin >> (*this)[i];
-//	}
-//}
-//
-//template<typename T>
-//void MathVector<T>::print_vector() const {
-//	for (size_t i = 0; i < _size; i++) {
-//		std::cout << (*this)[i] << ' '; 
-//	}
-//	std::cout << std::endl;
-//}
 
 //#endif // MATH_VECTOR
