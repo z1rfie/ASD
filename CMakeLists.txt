@@ -13,25 +13,12 @@ include(cmake/function.cmake)         # подхватываем функции,
                                       # для простоты мы объединили наборы команд для создания статической библиотеки
 								      # и для создания исполняемого проекта в отдельные функции
 
-add_subdirectory(lib_easy_example)    # подключаем дополнительный CMakeLists.txt из подкаталога с именем lib_easy_example
 add_subdirectory(main)                # подключаем дополнительный CMakeLists.txt из подкаталога с именем main
 add_subdirectory(lib_tvector)
 add_subdirectory(lib_math_vector)
 add_subdirectory(lib_matrix)
 add_subdirectory(lib_triangle_matrix)
-add_subdirectory(lib_algorithms)
-add_subdirectory(lib_stack)
-add_subdirectory(lib_queue)
-add_subdirectory(lib_list)
-add_subdirectory(lib_doubly_linked_list)
-add_subdirectory(lib_list_stack)
-add_subdirectory(lib_list_queue)
 add_subdirectory(lib_dsu)
-add_subdirectory(lib_expression)
-add_subdirectory(lib_parser)
-add_subdirectory(lib_lexem)
-add_subdirectory(lib_itable)
-add_subdirectory(lib_unsorted_table_m)
 
 option(BTEST "build test?" ON)        # указываем подключаем ли google-тесты (ON или YES) или нет (OFF или NO)
 
