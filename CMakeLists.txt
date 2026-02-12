@@ -17,6 +17,7 @@ add_subdirectory(lib_easy_example)    # подключаем дополните�
 add_subdirectory(main)                # подключаем дополнительный CMakeLists.txt из подкаталога с именем main
 add_subdirectory(lib_itable)
 add_subdirectory(lib_unsorted_table_m)
+add_subdirectory(lib_tvector)
 
 option(BTEST "build test?" ON)        # указываем подключаем ли google-тесты (ON или YES) или нет (OFF или NO)
 
