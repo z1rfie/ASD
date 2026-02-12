@@ -1,4 +1,4 @@
-#define MATRIX
+//#define MATRIX
 #ifdef MATRIX
 
 #include "../lib_matrix/matrix.h"
@@ -352,48 +352,182 @@ void vectors_menu() {
 
 #endif // MATRIX
 
-//#define LIB_STACK
-#ifdef LIB_STACK
+#define EXPRESSION
+#ifdef EXPRESSION
+
+#include "../lib_tvector/vector.h"
+#include "../lib_expression/expression.h"
 
 #include <iostream>
-#include <stack>
+#include <cstdlib>
+#include <iomanip>
 
-bool balanced(const std::string& s) {
-    std::stack<char> stack;
-    for (char c : s) {
-        switch (c) {
-
-        case '(': stack.push(')'); break;
-        case '[': stack.push(']'); break;
-        case '{': stack.push('}'); break;
-        case '<': stack.push('>'); break;
-
-        case ')':
-        case ']':
-        case '}':
-        case '>':
-            if (stack.empty() || stack.top() != c) {
-                return false;
-            }
-            stack.pop();
-            break;
-        default:
-            break;
-        }
-    }
-    return stack.empty();
-}
-
-void test(const std::string& s) {
-    std::cout << '"' << s << "\" " << (balanced(s) ? "yes" : "no") << '\n';
-}
+void print_menu();
+void print_table(const TVector<Expression>& expressions);
 
 int main() {
-    test("");
-    test("a(b[c]d)e");
-    test("a(b[c)d]e");
-    test("a(b[c]d");
-    test("b[c]d)e");
+    setlocale(LC_ALL, "rus");
+    int choice;
+    TVector<Expression> expressions;
+    int next_id = 1;
+
+    while (1) {
+        system("cls");
+        print_table(expressions);
+        print_menu();
+        std::cin >> choice;
+
+        switch (choice) {
+        case 1: {
+            std::string str_expr;
+            std::cout << "Ââåäèòå âûðàæåíèå: ";
+            std::cin.ignore();
+            std::getline(std::cin, str_expr);
+            try {
+                Expression new_expr(next_id, str_expr);
+                expressions.push_back_elem(new_expr);
+                next_id++;
+            }
+            catch (const std::exception& e) {
+                std::cerr << e.what() << std::endl;
+                system("pause");
+            }
+            break;
+        }
+        case 2: {
+            int id;
+            std::cout << "Ââåäèòå ID âûðàæåíèÿ äëÿ óäàëåíèÿ: ";
+            std::cin >> id;
+
+            bool found = false;
+
+            for (size_t i = 0; i < expressions.capacity(); i++) {
+                if (expressions.states()[i] == busy && expressions.data()[i].get_id() == id) {
+                    expressions.erase_elem(i + 1);
+                    found = true;
+                    std::cout << "Âûðàæåíèå ñ ID " << id << " óäàëåíî." << std::endl;
+                    break;
+                }
+            }
+
+            if (!found) {
+                std::cout << "Îøèáêà: Âûðàæåíèå ñ ID " << id << " íå íàéäåíî." << std::endl;
+            }
+
+            system("pause");
+            break;
+        }
+        case 3: {
+            int id;
+            std::cout << "Ââåäèòå ID âûðàæåíèÿ äëÿ çàäàíèÿ ïåðåìåííûõ: ";
+            std::cin >> id;
+
+            bool found = false;
+
+            for (size_t i = 0; i < expressions.capacity(); i++) {
+                if (expressions.states()[i] == busy && expressions.data()[i].get_id() == id) {
+                    expressions.data()[i].set_variables();
+                    found = true;
+                    std::cout << "Ïåðåìåííûå óñïåøíî çàäàíû." << std::endl;
+                    break;
+                }
+            }
+
+            if (!found) {
+                std::cout << "Îøèáêà: Âûðàæåíèå ñ ID " << id << " íå íàéäåíî." << std::endl;
+            }
+
+            system("pause");
+            break;
+        }
+        case 4: {
+            int id;
+            std::cout << "Ââåäèòå ID âûðàæåíèÿ äëÿ âû÷èñëåíèÿ: ";
+            std::cin >> id;
+
+            bool found = false;
+            for (size_t i = 0; i < expressions.capacity(); i++) {
+                if (expressions.states()[i] == busy && expressions.data()[i].get_id() == id) {
+                    found = true;
+                    try {
+                        double result = expressions.data()[i].calculate();
+                        std::cout << "Ðåçóëüòàò âûðàæåíèÿ [" << expressions.data()[i].get_expression() << "]: " << std::endl;
+                        std::cout << ">>> " << result << " <<<" << std::endl;
+                    }
+                    catch (const std::exception& e) {
+                        std::cout << "Îøèáêà ïðè âû÷èñëåíèè: " << e.what() << std::endl;
+                    }
+                    break;
+                }
+            }
+
+            if (!found) {
+                std::cout << "Îøèáêà: Âûðàæåíèå ñ ID " << id << " íå íàéäåíî." << std::endl;
+            }
+
+            system("pause");
+            break;
+        }
+        case 0: {
+            return 0;
+        }
+        default: {
+            std::cout << "Íåïðàâèëüíûé âûáîð! Ïîïðîáóéòå ñíîâà." << std::endl;
+            system("pause");
+        }
+        }
+    }
 }
 
-#endif // LIB_STACK
+void print_menu() {
+    std::cout << "== ÌÅÍÞ: ==" << std::endl;
+    std::cout << "1. Ñîçäàòü íîâîå âûðàæåíèå" << std::endl;
+    std::cout << "2. Óäàëèòü âûðàæåíèå" << std::endl;
+    std::cout << "3. Çàäàòü ïåðåìåííûå" << std::endl;
+    std::cout << "4. Âû÷èñëèòü çíà÷åíèå âûðàæåíèÿ" << std::endl;
+    std::cout << "0. ÂÛÕÎÄ" << std::endl;
+    std::cout << std::endl;
+    std::cout << "Âàø âûáîð: ";
+}
+
+void print_table(const TVector<Expression>& expressions) {
+    std::cout << "+———————————————————————————————————————————————————————————————————————————————+" << std::endl;
+    std::cout << "| ID  | EXPRESSION                                   | VARAIBLES VALUES         |" << std::endl;
+    std::cout << "+———————————————————————————————————————————————————————————————————————————————+" << std::endl;
+
+    if (expressions.is_empty()) {
+        std::cout << "|                         Íåò ñîõðàí¸ííûõ âûðàæåíèé                             |" << std::endl;
+        std::cout << "+———————————————————————————————————————————————————————————————————————————————+" << std::endl;
+        std::cout << std::endl;
+        return;
+    }
+
+    for (size_t i = 0; i < expressions.capacity(); i++) {
+        if (expressions.states()[i] == busy) {
+            const Expression& e = expressions.data()[i];
+
+            std::cout << "| " << std::setw(3) << std::left << e.get_id() << " | "
+                << std::setw(44) << std::left << e.get_expression() << " | ";
+
+            std::string vars_str = "";
+            const auto& vars_map = e.get_variables();
+
+            if (vars_map.empty()) {
+                vars_str = "íå çàäàíû";
+            }
+            else {
+                for (auto it = vars_map.begin(); it != vars_map.end(); ++it) {
+                    vars_str += it->first + " = " + std::to_string((int)it->second); 
+                    if (std::next(it) != vars_map.end()) vars_str += ", ";
+                }
+            }
+
+            std::cout << std::setw(24) << std::left << vars_str << " |" << std::endl;
+        }
+    }
+
+    std::cout << "+———————————————————————————————————————————————————————————————————————————————+" << std::endl;
+    std::cout << std::endl;
+}
+
+#endif // EXPRESSION

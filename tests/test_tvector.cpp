@@ -451,6 +451,17 @@ TEST(TestTVectorLib, not_find_last_elems) {
     EXPECT_EQ(actual_result[0], -1);
 }
 
+TEST(TestTVectorLib, test_find_elem) {
+    TVector<char> vec(5);
+    vec.push_back_elem('a');
+    vec.push_back_elem('h');
+    vec.push_back_elem('v');
+
+    char& actual_res = vec.find_elem('h');
+
+    EXPECT_EQ(actual_res, 'h');
+}
+
 TEST(TestTVectorLib, find_all_elem) {
     // Arrange
     int arr[14] = { 1, 2, 3, 4, 5, 10, 7, 8, 9, 10, 11, 12, 13, 14 };

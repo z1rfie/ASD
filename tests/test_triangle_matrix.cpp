@@ -150,7 +150,7 @@ TEST(TestTriangleMatrix, acalar_multiplication_assignment_one) {
     EXPECT_EQ(mat[0][0], 5);
 }
 
-TEST(TriangleMatrix, matrix_multiplication) {
+TEST(TestTriangleMatrix, matrix_multiplication) {
     TriangleMatrix<int> mat1(2);
     TriangleMatrix<int> mat2(2);
 
@@ -196,7 +196,7 @@ TEST(TestTriangleMatrix, vector_multiplication) {
     EXPECT_EQ(result[1], 15);
 }
 
-TEST(TriangleMatrix, vector_multiplication_wrong_size) {
+TEST(TestTriangleMatrix, vector_multiplication_wrong_size) {
     TriangleMatrix<int> mat(2);
     MathVector<int> vec(3);
     EXPECT_THROW(mat * vec, std::invalid_argument);

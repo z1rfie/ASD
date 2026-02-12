@@ -140,13 +140,19 @@ MathVector<T>& MathVector<T>::operator=(const MathVector<T>& other) {
 
 template<typename T>
 T& MathVector<T>::operator[](size_t index) {
-	//if (index - _start_index < 0) return T();
+	if (index - _start_index < 0) {
+		T value;
+		return value;
+	}
 	return _data[index - _start_index];
 }
 
 template<typename T>
 const T& MathVector<T>::operator[](size_t index) const {
-	//if (index - _start_index < 0) return T();
+	/*if (index - _start_index < 0) {
+		T value;
+		return value;
+	}*/
 	return _data[index - _start_index];
 }
 

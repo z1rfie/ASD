@@ -89,37 +89,113 @@ TEST(TestAlgorithmsLib, test_read_expression_message) {
     }
 }
 
-//TEST(TestAlgorithmsLib, test_is_looped) {
-//    List<int> list;
-//
-//    for (int i = 0; i < 5; i++) {
-//        list.push_back(i);
-//    }
-//
-//    Node<int>* node = list.tail();
-//    node->next = list.head()->next;
-//
-//    EXPECT_TRUE(is_looped(list));
-//
-//    node->next = nullptr;
-//}
-//
-//TEST(TestAlgorithmsLib, test_is_looped_false) {
-//    List<int> list;
-//
-//    for (int i = 0; i < 5; i++) {
-//        list.push_back(i);
-//    }
-//
-//    EXPECT_FALSE(is_looped(list));
-//}
+TEST(TestAlgorithmsLib, test_is_looped) {
+    List<int> list;
+
+    for (int i = 0; i < 5; i++) {
+        list.push_back(i);
+    }
+
+    Node<int>* node = list.tail();
+    node->next = list.head()->next;
+
+    EXPECT_TRUE(is_looped(list));
+
+    node->next = nullptr;
+}
+
+TEST(TestAlgorithmsLib, test_is_looped_false) {
+    List<int> list;
+
+    for (int i = 0; i < 5; i++) {
+        list.push_back(i);
+    }
+
+    EXPECT_FALSE(is_looped(list));
+}
+
+TEST(TestAlgorithmsLib, test_is_looped_reversal_signs) {
+    List<int> list;
+
+    for (int i = 0; i < 5; i++) {
+        list.push_back(i);
+    }
+
+    Node<int>* node = list.tail();
+    node->next = list.head()->next;
+
+    EXPECT_TRUE(is_looped_reversal_signs(list));
+
+    node->next = nullptr;
+}
+
+TEST(TestAlgorithmsLib, test_is_looped_reversal_signs_false) {
+    List<int> list;
+
+    for (int i = 0; i < 5; i++) {
+        list.push_back(i);
+    }
+
+    EXPECT_FALSE(is_looped_reversal_signs(list));
+}
+
+TEST(TestAlgorithmsLib, test_find_loop) {
+    List<int> list;
+
+    for (int i = 0; i < 5; i++) {
+        list.push_back(i);
+    }
+
+    Node<int>* node = list.tail();
+    node->next = list.head()->next;
+
+    EXPECT_EQ(find_loop(list), list.head()->next);
+
+    node->next = nullptr;
+}
+
+TEST(TestAlgorithmsLib, test_not_find_loop) {
+    List<int> list;
+
+    for (int i = 0; i < 5; i++) {
+        list.push_back(i);
+    }
+
+    EXPECT_EQ(find_loop(list), nullptr);
+}
 
 TEST(TestAlgorithmsLib, test_count_islands) {
     Matrix<int> matr(4, 4);
     matr[0][0] = 0; matr[0][1] = 1; matr[0][2] = 0; matr[0][3] = 0;
-    matr[1][0] = 0; matr[1][1] = 0; matr[1][2] = 0; matr[1][3] = 0;
+    matr[1][0] = 0; matr[1][1] = 1; matr[1][2] = 0; matr[1][3] = 0;
     matr[2][0] = 1; matr[2][1] = 0; matr[2][2] = 1; matr[2][3] = 1;
     matr[3][0] = 1; matr[3][1] = 0; matr[3][2] = 1; matr[3][3] = 0;
 
     EXPECT_EQ(return_count_islands(matr), 3);
+}
+
+TEST(TestAlgorithmsLib, test_count_islands_one) {
+    Matrix<int> matr(4, 4);
+    matr[0][0] = 0; matr[0][1] = 0; matr[0][2] = 0; matr[0][3] = 0;
+    matr[1][0] = 0; matr[1][1] = 0; matr[1][2] = 0; matr[1][3] = 0;
+    matr[2][0] = 1; matr[2][1] = 0; matr[2][2] = 0; matr[2][3] = 0;
+    matr[3][0] = 0; matr[3][1] = 0; matr[3][2] = 0; matr[3][3] = 0;
+
+    EXPECT_EQ(return_count_islands(matr), 1);
+}
+
+
+TEST(TestAlgorithmsLib, test_count_islands_null) {
+    Matrix<int> matr(4, 4);
+    matr[0][0] = 0; matr[0][1] = 0; matr[0][2] = 0; matr[0][3] = 0;
+    matr[1][0] = 0; matr[1][1] = 0; matr[1][2] = 0; matr[1][3] = 0;
+    matr[2][0] = 0; matr[2][1] = 0; matr[2][2] = 0; matr[2][3] = 0;
+    matr[3][0] = 0; matr[3][1] = 0; matr[3][2] = 0; matr[3][3] = 0;
+
+    EXPECT_EQ(return_count_islands(matr), 0);
+}
+
+TEST(TestAlgorithmsLib, test_labirint) {
+    Matrix<bool> matr = make_labirint(3, 2, 3, 3);
+    print(matr, 3, 3);
 }

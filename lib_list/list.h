@@ -51,6 +51,10 @@
 			T& operator*() const {
 				return _current->value;
 			}
+
+			Node<T>* get_node() const {
+				return _current;
+			}
 		};
 
 		Iterator begin() { return Iterator(_head); }
@@ -61,9 +65,11 @@
 
 		const Node<T>* head() const;
 		const Node<T>* tail() const;
-		size_t count();
+		const size_t count() const;
 
 		bool is_empty() const;
+
+		List& operator=(const List& other);
 
 		// вставка
 		void push_front(const T& value) noexcept; 
@@ -116,10 +122,35 @@
 	const Node<T>* List<T>::tail() const { return _tail; }
 
 	template <class T>
-	size_t  List<T>::count() { return _count; }
+	const size_t  List<T>::count() const { return _count; }
 
 	template <class T>
 	bool List<T>::is_empty() const { return _head == nullptr; }
+
+	template <class T>
+	List<T>& List<T>::operator=(const List<T>& other) {
+		if (this == &other)
+			return *this;
+
+		Node<T>* cur = _head;
+		while (cur) {
+			Node<T>* next = cur->next;
+			delete cur;
+			cur = next;
+		}
+
+		_head = nullptr;
+		_tail = nullptr;
+		_count = 0;
+
+		Node<T>* src = other._head;
+		while (src) {
+			push_back(src->value);
+			src = src->next;
+		}
+
+		return *this;
+	}
 
 	template <class T>
 	void List<T>::push_front(const T& value) noexcept {
@@ -152,8 +183,7 @@
 	void List<T>::insert(Node<T>* node, const T& val) { // вставляем после объекта на который указываем
 		if (node == nullptr || is_empty()) throw std::invalid_argument("Node cannot be null or list is empty");
 
-		Node<T>* new_node = new Node<T>(val);
-		new_node->next = node->next;
+		Node<T>* new_node = new Node<T>(val, node->next);
 		node->next = new_node;
 
 		if (node == _tail) {
@@ -233,9 +263,16 @@
 		if (is_empty()) {
 			throw std::runtime_error("Cannot erase from empty list");
 		}
-
 		if (pos >= _count) {
 			throw std::out_of_range("Position out of range");
+		}
+		if (pos == 0) {
+			pop_front();
+			return;
+		}
+		if (pos == _count - 1) {
+			pop_back();
+			return;
 		}
 
 		Node<T>* cur = _head;
@@ -245,10 +282,6 @@
 
 		Node<T>* del = cur->next;
 		cur->next = del->next;
-
-		if (del == _tail) {
-			_tail = cur;
-		}
 
 		delete del;
 		_count--;

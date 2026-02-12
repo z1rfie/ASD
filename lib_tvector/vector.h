@@ -99,6 +99,8 @@ public:
     Iterator end() noexcept { return Iterator(_data + _size); }
 
     inline const T* data() const noexcept;
+    inline T* data() noexcept;
+
     inline const State* states() const noexcept;
 
     void push_front_elem(const T&);
@@ -137,6 +139,8 @@ public:
     friend int find_first<T>(const TVector<T>&, const T&);
     friend int find_last<T>(const TVector<T>&, const T&);
     friend int* find_elems<T>(const TVector<T>&, const T&);
+
+    T& find_elem(const T& value);
 
     friend void swap<T>(T* a, T* b);
     friend void randomize<T>(const TVector<T>& vec);
@@ -231,6 +235,9 @@ template<class T>
 inline const T* TVector<T>::data() const noexcept { return _data; }
 
 template<class T>
+inline T* TVector<T>::data() noexcept { return _data; }
+
+template<class T>
 inline const State* TVector<T>::states() const noexcept { return _states; }
 
 template<class T>
@@ -305,12 +312,15 @@ template<class T>
 inline bool TVector<T>::is_empty() const noexcept {
     if (_size == 0) return true;
 
-    for (size_t i = 0; i < _capacity; ++i) {
+    /*for (size_t i = 0; i < _capacity; ++i) {
         if (_states[i] == busy) {
             return false;
         }
     }
-    return true;
+    return true;*/
+
+    if (_size == _deleted) return true;
+    else return false;
 }
 
 
@@ -547,14 +557,9 @@ void TVector<T>::erase_elem(size_t pos) {
         throw std::out_of_range("Insert position out of range");
     }
 
-    for (int i = pos - 1; i < _size; i++) {
-        if (_states[i] == busy) {
-            _states[i] = deleted;
-            break;
-        }
-    }
-
+    _states[pos - 1] = deleted;
     _deleted += 1;
+
     if (_deleted * 100 > _capacity * 15) {
         reallocate_memory_for_delete();
     }
@@ -900,6 +905,12 @@ const T& TVector<T>::operator[](size_t pos) const {
     return _data[pos];
 }
 
+//template <typename T>
+//T& TVector<T>::operator[](size_t pos) { return _data[pos]; }
+//
+//template <typename T>
+//const T& TVector<T>::operator[](size_t pos) const { return _data[pos]; }
+
 template<class T>
 void TVector<T>::print_elems() {
     int entrance = 0;
@@ -1058,6 +1069,21 @@ int find_last(const TVector<T>& vec, const T& value) {
     }
 
     return last_found;
+}
+
+template<typename T>
+T& TVector<T>::find_elem(const T& value) {
+    if (_size == 0) {
+        throw std::invalid_argument("Cannot find from empty vector");
+    }
+
+    for (size_t i = 0; i < _size; i++) {
+        if (_states[i] == busy && _data[i] == value) {
+            return _data[i];
+        }
+    }
+
+    throw std::runtime_error("Element not found");
 }
 
 template<typename T>

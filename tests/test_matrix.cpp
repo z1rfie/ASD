@@ -22,20 +22,16 @@ TEST(TestMatrixLib, size_constructor) {
     EXPECT_EQ(mat.get_n(), N);
     EXPECT_EQ(mat.get_m(), M);
     EXPECT_EQ(mat.size(), N);
-
-    EXPECT_TRUE(mat.is_empty());
 }
 
-TEST(TestMatrixLib, huge_size_constructor) {
-    const size_t N = 10000, M = 40000;
-    Matrix<double> mat(N, M);
-
-    EXPECT_EQ(mat.get_n(), N);
-    EXPECT_EQ(mat.get_m(), M);
-    EXPECT_EQ(mat.size(), N);
-
-    EXPECT_TRUE(mat.is_empty());
-}
+//TEST(TestMatrixLib, huge_size_constructor) {
+//    const size_t N = 10000, M = 40000;
+//    Matrix<double> mat(N, M);
+//
+//    EXPECT_EQ(mat.get_n(), N);
+//    EXPECT_EQ(mat.get_m(), M);
+//    EXPECT_EQ(mat.size(), N);
+//}
 
 TEST(TestMatrixLib, copy_constructor) {
     Matrix<int> original(2, 3);

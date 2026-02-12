@@ -119,3 +119,18 @@ TEST(TestDsuLib, find_rec_second_case) {
 	EXPECT_EQ(dsu.find_rec(4), 0);
 	EXPECT_EQ(dsu.parent()[4], 0);
 }
+
+TEST(TestDsuLib, test) {
+	DSU dsu(6);
+
+	dsu.func_union(0, 1);
+	
+	dsu.func_union(2, 3);
+
+	dsu.func_union(4, 5);
+
+	dsu.func_union(3, 5);
+	dsu.func_union(1, 5);
+
+	EXPECT_EQ(dsu.rank()[2], 2);
+}

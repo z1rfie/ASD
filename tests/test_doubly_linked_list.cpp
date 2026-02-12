@@ -188,9 +188,26 @@ TEST(TestDoublyLinkedListLib, erase_by_pos) {
     list.erase(2);
 
     EXPECT_EQ(list.head()->value, 1);
-    EXPECT_EQ(list.tail()->value, 3);
+    EXPECT_EQ(list.tail()->value, 2);
     EXPECT_EQ(list.count(), 2);
-    EXPECT_EQ(list.head()->next->value, 3);
+    EXPECT_EQ(list.head()->next->value, 2);
+}
+
+TEST(TestDoublyLinkedListLib, erase_by_pos_more_count) {
+    DoublyLinkedList<int> list;
+    list.push_back(1);
+    list.push_back(2);
+    list.push_back(3);
+
+    EXPECT_EQ(list.count(), 3);
+    EXPECT_THROW(list.erase(5), std::out_of_range);
+}
+
+TEST(TestDoublyLinkedListLib, erase_is_empty) {
+    DoublyLinkedList<int> list;
+
+    EXPECT_EQ(list.count(), 0);
+    EXPECT_THROW(list.erase(5), std::runtime_error);
 }
 
 TEST(TestDoublyLinkedListLib, erase_last_elem) {
@@ -199,7 +216,7 @@ TEST(TestDoublyLinkedListLib, erase_last_elem) {
     list.push_back(2);
     list.push_back(3);
 
-    list.erase(3);
+    list.erase(2);
 
     EXPECT_EQ(list.head()->value, 1);
     EXPECT_EQ(list.tail()->value, 2);
@@ -290,7 +307,7 @@ TEST(TestDoublyLinkedListLib, iterator_read) {
     int expected_values[5] = { 1, 4, 7, 10, 13 };
 
     int index = 0;
-    for (auto it = list.begin(); it != list.end(); ++it) {
+    for (auto it = list.begin(); it != list.end(); it++) {
         EXPECT_EQ(*it, expected_values[index++]);
     }
 }
@@ -310,7 +327,7 @@ TEST(TestDoublyLinkedListLib, iterator_write) {
     int expected_values[5] = { 100, 101, 102, 103, 104 };
 
     int index = 0;
-    for (auto it = list.begin(); it != list.end(); ++it) {
+    for (auto it = list.begin(); it != list.end(); it++) {
         EXPECT_EQ(*it, expected_values[index++]);
     }
 }
@@ -320,6 +337,52 @@ TEST(TestDoublyLinkedListLib, iterate_empty_list) {
 
     int iterations = 0;
     for (auto it = list.begin(); it != list.end(); ++it) {
+        iterations++;
+    }
+    EXPECT_EQ(iterations, 0);
+}
+
+TEST(TestDoublyLinkedListLib, iterator_read_rbegin_rend) {
+    DoublyLinkedList<int> list;
+
+    for (int i = 0; i < 5; i++) {
+        list.push_back(i * 3 + 1);
+    }
+
+    int expected_values_reversed[5] = { 13, 10, 7, 4, 1 };
+
+    int index = 0;
+
+    for (auto it = list.rbegin(); it != list.rend(); ++it) {
+        EXPECT_EQ(*it, expected_values_reversed[index++]);
+    }
+}
+
+TEST(TestDoublyLinkedListLib, iterator_write_rbegin_rend) {
+    DoublyLinkedList<int> list;
+
+    for (int i = 0; i < 5; i++) {
+        list.push_back(i);
+    }
+
+    int new_value = 100;
+    for (auto it = list.rbegin(); it != list.rend(); ++it) {
+        *it = new_value++;
+    }
+
+    int expected_values[5] = { 100, 101, 102, 103, 104 };
+
+    int index = 0;
+    for (auto it = list.rbegin(); it != list.rend(); it++) {
+        EXPECT_EQ(*it, expected_values[index++]);
+    }
+}
+
+TEST(TestDoublyLinkedListLib, empty_iterator_rbegin_rend) {
+    DoublyLinkedList<int> list;
+
+    int iterations = 0;
+    for (auto it = list.rbegin(); it != list.rend(); ++it) {
         iterations++;
     }
     EXPECT_EQ(iterations, 0);

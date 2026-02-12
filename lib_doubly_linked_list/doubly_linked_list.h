@@ -61,8 +61,52 @@ public:
 		}
 	};
 
+	class ReverseIterator {
+		Node<T>* _current;
+	public:
+		ReverseIterator() : _current(nullptr) {}
+		ReverseIterator(Node<T>* node) : _current(node) {}
+
+		ReverseIterator& operator=(const ReverseIterator& other) {
+			_current = other._current;
+			return *this;
+		}
+
+		bool operator!=(const ReverseIterator& other) const {
+			return _current != other._current;
+		}
+
+		ReverseIterator& operator++() {
+			_current = _current->prev;
+			return *this;
+		}
+		ReverseIterator operator++(int) {
+			ReverseIterator temp = *this;
+			_current = _current->prev;
+			return temp;
+		}
+
+		ReverseIterator& operator--() {
+			_current = _current->next;
+			return *this;
+		}
+
+		ReverseIterator operator--(int) {
+			ReverseIterator temp = *this;
+			_current = _current->next;
+			return temp;
+		}
+
+		T& operator*() const {
+			return _current->value;
+		}
+	};
+
 	Iterator begin() const { return Iterator(_head); }
 	Iterator end() const { return Iterator(nullptr); }
+
+	ReverseIterator rbegin() const { return ReverseIterator(_tail); }
+	ReverseIterator rend() const { return ReverseIterator(nullptr); }
 
 	Node<T>* head() const;
 	Node<T>* tail() const;
@@ -153,7 +197,6 @@ void DoublyLinkedList<T>::push_back(const T& value) noexcept {
 template <class T>
 void DoublyLinkedList<T>::insert(Node<T>* node, const T& val) {
 	if (node == nullptr) throw std::invalid_argument("Node cannot be null");
-	if (is_empty()) throw std::invalid_argument("List is empty");
 
 	Node<T>* new_node = new Node<T>(val, node->next, node);
 	node->next = new_node;
@@ -252,20 +295,20 @@ void DoublyLinkedList<T>::erase(size_t pos) {
 		throw std::runtime_error("Cannot erase from empty list");
 	}
 
-	if (pos > _count) {
+	if (pos >= _count) {
 		throw std::out_of_range("Position out of range");
 	}
-	if (pos == 1) {
+	if (pos == 0) {
 		pop_front();
 		return;
 	}
-	if (pos == _count) {
+	if (pos == _count - 1) {
 		pop_back();
 		return;
 	}
 
 	Node<T>* cur = _head;
-	for (size_t i = 0; i < pos - 1; i++) {
+	for (size_t i = 0; i < pos; i++) {
 		cur = cur->next;
 	}
 

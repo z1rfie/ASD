@@ -40,7 +40,7 @@ void read_expression(std::string expression) {
         char c = expression[i];
 
         if (std::isspace(c)) {
-            continue; 
+            continue;
         }
 
         switch (c) {
@@ -66,13 +66,13 @@ void read_expression(std::string expression) {
         case ']':
         case '>':
             if (stack.is_empty()) {
-                throw std::invalid_argument("Missing opened bracket");
+                throw std::invalid_argument("Отсутствует открытая скобка");
             }
             if (stack.top() != c) {
-                throw std::invalid_argument("Missing closed bracket");
+                throw std::invalid_argument("Отсутствует закрытая скобка");
             }
             if (expect_operand) {
-                throw std::invalid_argument("Missing operand before bracket");
+                throw std::invalid_argument("Пропущенный операнд перед скобкой");
             }
             stack.pop();
             expect_operand = false;
@@ -84,14 +84,14 @@ void read_expression(std::string expression) {
         case '/':
         case '^':
             if (expect_operand) {
-                throw std::invalid_argument("Missing operand");
+                throw std::invalid_argument("Отсутствующий операнд");
             }
             expect_operand = true;
             break;
 
         default:
             if (std::isalnum(c)) {
-                if (!expect_operand) throw std::invalid_argument("Missing operation");
+                if (!expect_operand) throw std::invalid_argument("Пропущенная операция");
                 expect_operand = false;
 
                 while (i + 1 < expression.length() && std::isalnum(expression[i + 1])) {
@@ -99,20 +99,21 @@ void read_expression(std::string expression) {
                 }
             }
             else {
-                throw std::invalid_argument("Invalid character");
+                throw std::invalid_argument("Недопустимый символ");
             }
             break;
         }
     }
 
     if (!stack.is_empty()) {
-        throw std::invalid_argument("Missing closed bracket");
+        throw std::invalid_argument("Отсутствует закрытая скобка");
     }
 
     if (expect_operand) {
-        throw std::invalid_argument("Missing second operand");
+        throw std::invalid_argument("Пропущенный второй операнд");
     }
 }
+
 
 int return_count_islands(const Matrix<int>& matr) {
     int n = matr.get_n();
@@ -122,10 +123,10 @@ int return_count_islands(const Matrix<int>& matr) {
     int di[] = { -1, 1, 0, 0 };
     int dj[] = { 0, 0, -1, 1 };
 
-    for (int i = 0; i < n; ++i) {
-        for (int j = 0; j < m; ++j) {
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < m; j++) {
             if (matr[i][j] == 1) {
-                for (int k = 0; k < 4; ++k) {
+                for (int k = 0; k < 4; k++) {
                     int ni = i + di[k];
                     int nj = j + dj[k];
 
@@ -142,11 +143,179 @@ int return_count_islands(const Matrix<int>& matr) {
     }
 
     int islands = 0;
-    for (int i = 0; i < n * m; ++i) {
+    for (int i = 0; i < n * m; i++) {
         if (dsu.find(i) == i && matr[i / m][i % m] == 1) {
             islands++;
         }
     }
 
     return islands;
+}
+
+List<Lexem> build_polish(List<Lexem>& lexems) {
+    List<Lexem> postfix_form;
+    Stack<Lexem> stack(50);
+
+    Node<Lexem>* current = lexems.head();
+
+    while (current != nullptr) {
+        Lexem lexem = current->value;
+
+        switch (lexem.get_type()) {
+        case Constant:
+        case Variable:
+            postfix_form.push_back(lexem);
+            break;
+
+        case OpenBrecket:
+            stack.push(lexem);
+            break;
+
+        case ClosedBrecket:
+            while (!stack.is_empty() && stack.top().get_type() != OpenBrecket) {
+                postfix_form.push_back(stack.top()); stack.pop();
+            }
+
+            if (!stack.is_empty() && stack.top().get_type() == OpenBrecket) {
+                stack.pop();
+            }
+
+            if (!stack.is_empty() && stack.top().get_type() == Function) {
+                postfix_form.push_back(stack.top()); stack.pop();
+            }
+            break;
+
+        case Function:
+            stack.push(lexem);
+            break;
+
+        case Operator:
+            while (!stack.is_empty() && (stack.top().get_type() == Operator || stack.top().get_type() == Function)
+                && stack.top().get_priority() >= lexem.get_priority()) {
+                postfix_form.push_back(stack.top());
+                stack.pop();
+            }
+            stack.push(lexem);
+            break;
+
+        default:
+            break;
+        }
+
+        current = current->next;
+    }
+
+    while (!stack.is_empty()) {
+        postfix_form.push_back(stack.top());
+        stack.pop();
+    }
+
+    return postfix_form;
+}
+
+double calculate_polish(List<Lexem>& polish_record, std::map<std::string, double>& variables) {
+    Stack<double> stack(50);
+
+    Node<Lexem>* current = polish_record.head();
+
+    while (current != nullptr) {
+        Lexem lexem = current->value;
+
+        switch (lexem.get_type()) {
+        case Constant: {
+            stack.push(lexem.get_value());
+            break;
+        }
+        case Variable: {
+            stack.push(variables[lexem.get_name()]);
+            break;
+        }
+        case Operator: {
+            double right = stack.top(); stack.pop();
+            double left = stack.top(); stack.pop();
+
+            if (lexem.get_name() == "+") stack.push(left + right);
+            else if (lexem.get_name() == "-") stack.push(left - right);
+            else if (lexem.get_name() == "*") stack.push(left * right);
+            else if (lexem.get_name() == "/") stack.push(left / right);
+            else if (lexem.get_name() == "^") stack.push(pow(left, right));
+            break;
+        }
+        case Function: {
+            double arg = stack.top(); stack.pop();
+            stack.push(lexem.get_function()(arg));
+            break;
+        }
+        default:
+            break;
+        }
+        current = current->next;
+    }
+    return stack.top();
+}
+
+Matrix<bool> make_labirint(int X, int Y, int N, int M) {
+    if (M <= 0 || N <= 0) {
+        throw std::out_of_range("Нельзя создать такой лабиринт");
+    }
+
+    if (X < 0 || X > M || Y < 0 || Y > M) {
+        throw std::out_of_range("Недопустимое значение");
+    }
+
+    srand(time(NULL));
+
+    Matrix<bool> matr(N, M);
+    DSU dsu(N * M);
+
+    for (int i = 0; i < N; i++) {
+        for (int j = 0; j < M; j++) {
+            matr[i][j] = true;
+        }
+    }
+
+    matr[0][X] = false;
+    matr[N - 1][Y] = false;
+
+    for (int i = 0; i < N; i++) {
+        for (int j = X; j < M; j++) {
+            while (matr[i][j] != matr[N - 1][Y]) {
+                int cell_1 = i * M * j;
+                if (j + 1 < M) {
+                    int cell_2 = i * M * (j + 1);
+                    if (dsu.find(cell_1) != dsu.find(cell_2)) {
+                        if (rand() % 2) {
+                            dsu.func_union(cell_1, cell_2);
+                            matr[i][j + 1] = false;
+                        }
+                    }
+                }
+
+                if (i + 1 < N) {
+                    int cell_2 = (i + 1) * M * j;
+                    if (dsu.find(cell_1) != dsu.find(cell_2)) {
+                        if (rand() % 2) {
+                            dsu.func_union(cell_1, cell_2);
+                            matr[i + 1][j] = false;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    return matr;
+}
+
+void print(Matrix<bool> labirint, int N, int M) {
+    for (int i = 0; i < N; i++) {
+        for (int j = 0; j < M; j++) {
+            if (labirint[i][j] == true) {
+                std::cout << "|  ";
+            }
+            else {
+                std::cout << "__";
+            }
+        }
+    }
 }

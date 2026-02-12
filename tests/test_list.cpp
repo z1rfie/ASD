@@ -127,6 +127,25 @@ TEST(TestListLib, insert_null_throw) {
 	EXPECT_THROW(list.insert(nullptr, 1), std::invalid_argument);
 }
 
+TEST(TestListLib, insert_middle) {
+	List<int> list;
+	for (size_t i = 0; i < 10; i++) {
+		if (i != 7 && i != 4) {
+			list.push_back(i);
+		}
+	}
+
+	list.insert(list.head()->next->next->next, 4);
+	list.insert(7, 7);
+
+	Node<int>* cur = list.head();
+
+	for (size_t i = 0; i < 10; i++) {
+		EXPECT_EQ(cur->value, i);
+		cur = cur->next;
+	}
+}
+
 TEST(TestListLib, pop_front) {
 	List<int> list;
 	list.push_back(1);
@@ -293,7 +312,7 @@ TEST(TestListLib, iterator_read) {
 	int expected_values[5] = { 1, 4, 7, 10, 13 };
 
 	int index = 0;
-	for (auto it = list.begin(); it != list.end(); ++it) {
+	for (auto it = list.begin(); it != list.end(); it++) {
 		EXPECT_EQ(*it, expected_values[index++]);
 	}
 }
@@ -309,7 +328,7 @@ TEST(TestListLib, iterator_write) {
 	int expected_values[5] = { 100, 101, 102, 103, 104 };
 
 	int index = 0;
-	for (auto it = list.begin(); it != list.end(); ++it) {
+	for (auto it = list.begin(); it != list.end(); it++) {
 		EXPECT_EQ(*it, expected_values[index++]);
 	}
 }

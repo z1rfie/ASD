@@ -5,47 +5,93 @@
 #include "../lib_stack/stack.h"
 #include "../lib_list/list.h"
 #include "../lib_dsu/dsu.h"
+#include "../lib_lexem/lexem.h"
 #include <iostream>
+#include <map>
 
 bool check_breckets(std::string str);
 
 void read_expression(std::string expression);
 
 template<typename T>
-bool is_looped(List<T> list) {
-    List<T>::Iterator it1 = list.begin();
-    List<T>::Iterator it2 = list.begin();
+bool is_looped(List<T>& list) {
+    List<T>::Iterator slow = list.begin();
+    List<T>::Iterator fast = list.begin();
 
-    int speed1 = 0, speed2 = 0;
-
-    while (it1 != list.end() || it2 != list.end()) {
-        it1 = ++speed1;
-        it2 = speed2 + 2;
+    if (slow == list.end()) {
+        return false;
     }
 
-    if (it1 == it2) {
-        return true;
-    }
+    while (fast != list.end()) {
+        ++slow;
 
+        ++fast; 
+        if (fast == list.end()) break;
+        ++fast;
+
+        if (slow == fast) {
+            return true;
+        }
+    }
     return false;
 }
 
-//template<typename T>
-//bool is_looped(List<T>& list) {
-//    List<T>::Iterator it1 = list.begin();
-//    List<T>::Iterator it2 = list.begin();
-//
-//    ++it2;
-//    while (it2 != list.end()) {
-//        if (it1 == it2) {
-//            return true;
-//        }
-//        ++it1;
-//        ++it2; ++it2;
-//    }
-//
-//    return false;
-//}
+template<typename T>
+bool is_looped_reversal_signs(List<T>& list) {
+    Node<T>* cur = list.head();
+    Node<T>* prev = nullptr;
+    Node<T>* next = nullptr;
+    Node<T>* start = list.head();
+
+    while (cur != nullptr) {
+        next = cur->next;
+        cur->next = prev;
+        prev = cur;
+        cur = next;
+        if (cur == start) {
+            return true;
+        }
+    }
+    return false;
+}
+
+template<typename T>
+Node<T>* find_loop(List<T>& list) {
+    auto slow = list.begin();
+    auto fast = list.begin();
+
+    if (slow == list.end()) {
+        return nullptr;
+    }
+
+    bool has_loop = false;
+
+    while (fast != list.end()) {
+        ++slow;
+
+        ++fast; 
+        if (fast == list.end()) break;
+        ++fast;
+
+        if (slow == fast) {
+            has_loop = true;
+            break;
+        }
+    }
+
+    if (!has_loop) {
+        return nullptr;
+    }
+
+    slow = list.begin();
+
+    while (slow != fast) {
+        ++slow;
+        ++fast;
+    }
+
+    return slow.get_node();
+}
 
 template<typename T>
 T find_local_min(const Matrix<T>& matr, size_t start_i, size_t start_j) {
@@ -92,5 +138,13 @@ T find_local_min(const Matrix<T>& matr, size_t start_i, size_t start_j) {
 }
 
 int return_count_islands(const Matrix<int>& matr);
+
+List<Lexem> build_polish(List<Lexem>& lexems);
+
+double calculate_polish(List<Lexem>& polish_record, std::map<std::string, double>& variables);
+
+Matrix<bool> make_labirint(int X, int Y, int N, int M);
+
+void print(Matrix<bool> labirint, int N, int M);
 
 #endif // ALGORITHMS

@@ -74,7 +74,7 @@ TriangleMatrix<T>::TriangleMatrix(const MathVector<MathVector<T>>& vec) : Matrix
 
 template<typename T>
 TriangleMatrix<T> TriangleMatrix<T>::operator+(const TriangleMatrix<T>& other) const { 
-	TriangleMatrix<T> result(_N);	
+	TriangleMatrix<T> result(_N);
 
 	for (size_t i = 0; i < _N; i++) {
 		for (size_t j = i; j < _N; j++) {

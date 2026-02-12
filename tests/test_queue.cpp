@@ -159,3 +159,18 @@ TEST(TestQueueLib, clear) {
 
 	EXPECT_TRUE(q.is_empty());
 }
+
+TEST(TestQueueLib, queue) {
+	Queue<int> q(9);
+	q.push(111); q.push(222); q.push(333);
+	q.push(444); q.push(555); q.push(666);
+	q.push(777); q.push(888); q.push(999);
+
+	q.pop(); q.pop(); q.pop();
+
+	q.push(123); q.push(456); q.push(789);
+
+	EXPECT_EQ(q.head(), 444);
+	EXPECT_EQ(q.tail(), 789);
+	EXPECT_TRUE(q.is_full());
+}

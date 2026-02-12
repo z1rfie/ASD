@@ -25,7 +25,7 @@ ListStack<T>::ListStack(const ListStack& other) : _data(other._data) {}
 
 template<typename T>
 void ListStack<T>::push(T val) {
-	_data.push_back(val);
+	_data.push_front(val);
 }
 
 template<typename T>
@@ -34,7 +34,7 @@ void ListStack<T>::pop() {
 		throw std::runtime_error("Cannot be removed from an empty stack");
 	}
 	
-	_data.pop_back();
+	_data.pop_front();
 }
 
 template<typename T>
@@ -43,7 +43,7 @@ T ListStack<T>::top() const {
 		throw std::runtime_error("There are no elements");
 	}
 
-	return _data.tail()->value;
+	return _data.head()->value;
 }
 
 template<typename T>
@@ -54,7 +54,7 @@ inline bool ListStack<T>::is_empty() const noexcept {
 template<typename T>
 void ListStack<T>::clear() noexcept {
 	while (!_data.is_empty()) {
-		_data.pop_back();
+		_data.pop_front();
 	}
 }
 
