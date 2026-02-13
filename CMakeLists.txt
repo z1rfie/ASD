@@ -18,6 +18,7 @@ add_subdirectory(main)                # подключаем дополните�
 add_subdirectory(lib_itable)
 add_subdirectory(lib_unsorted_table_m)
 add_subdirectory(lib_tvector)
+add_subdirectory(lib_tpair)
 
 option(BTEST "build test?" ON)        # указываем подключаем ли google-тесты (ON или YES) или нет (OFF или NO)
 

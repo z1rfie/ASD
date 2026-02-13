@@ -6,9 +6,9 @@
 
 template  <class TKey, class TValue>
 class UnsortedTableM : public ITable<TKey, TValue> {
-	TVector <std::pair<TKey, TValue>> _rows;
+	TVector <TPair<TKey, TValue>> _rows;
 public:
-	UnsortedTableM() : _rows() {}
+	UnsortedTableM() = default;
 	~UnsortedTableM() {}
 
 	void insert(TKey key, TValue value) override { _rows.push_back_elem(std::make_pair(key, value)); }
@@ -17,8 +17,8 @@ public:
 
 	bool is_empty() override { return _rows.is_empty(); }
 
-	template<typename U>
-	virtual friend std::ostream& operator<<(std::ostream&, const UnsortedTableM&);
+	template<class TKey, class TValue>
+	friend std::ostream& operator<<(std::ostream&, const UnsortedTableM<TKey, TValue>&);
 };
 
 #endif  // LIB_UNSORTED_TABLE_M

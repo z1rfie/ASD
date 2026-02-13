@@ -1,8 +1,13 @@
-// Copyright 2024 Marina Usova
+#ifndef LIB_TPAIR
+#define LIB_TPAIR
 
-#ifndef LIB_EASY_EXAMPLE_EASY_EXAMPLE_H_
-#define LIB_EASY_EXAMPLE_EASY_EXAMPLE_H_
+template  <class TKey, class TValue>
+struct TPair {
+	TKey key;
+	TValue value;
 
-float division(int a, int b);
+	TKey get_key() const { return key; }
+	TValue get_value() const { return value; }
+};
 
-#endif  // LIB_EASY_EXAMPLE_EASY_EXAMPLE_H_
+#endif  // LIB_TPAIR
