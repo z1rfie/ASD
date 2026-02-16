@@ -351,19 +351,19 @@ void TVector<T>::push_front_elem(const T& value) {
 
 template<class T>
 void TVector<T>::push_back_elem(const T& value) {
-    for (size_t i = _size; i > 0; i--) {
+    for (size_t i = 0; i < _size; i++) {
         if (_states[i] == deleted) {
             _data[i] = value;
             _states[i] = busy;
             _deleted--;
             return;
         }
-        if (_states[i] == busy) break;
     }
 
     if (_size >= _capacity) {
         reallocate_memory(_capacity + STEP_OF_CAPACITY);
     }
+
     _data[_size] = value;
     _states[_size] = busy;
     _size++;
@@ -1069,21 +1069,6 @@ int find_last(const TVector<T>& vec, const T& value) {
     }
 
     return last_found;
-}
-
-template<typename T>
-T& TVector<T>::find_elem(const T& value) {
-    if (_size == 0) {
-        throw std::invalid_argument("Cannot find from empty vector");
-    }
-
-    for (size_t i = 0; i < _size; i++) {
-        if (_states[i] == busy && _data[i] == value) {
-            return _data[i];
-        }
-    }
-
-    throw std::runtime_error("Element not found");
 }
 
 template<typename T>
