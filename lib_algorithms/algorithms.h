@@ -145,6 +145,6 @@ double calculate_polish(List<Lexem>& polish_record, std::map<std::string, double
 
 Matrix<bool> make_labirint(int X, int Y, int N, int M);
 
-void print(Matrix<bool> labirint, int N, int M);
+void print(Matrix<bool>& labirint, int N, int M);
 
 #endif // ALGORITHMS

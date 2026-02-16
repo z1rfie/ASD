@@ -278,26 +278,26 @@ Matrix<bool> make_labirint(int X, int Y, int N, int M) {
     matr[N - 1][Y] = false;
 
     for (int i = 0; i < N; i++) {
-        for (int j = X; j < M; j++) {
-            while (matr[i][j] != matr[N - 1][Y]) {
-                int cell_1 = i * M * j;
-                if (j + 1 < M) {
-                    int cell_2 = i * M * (j + 1);
-                    if (dsu.find(cell_1) != dsu.find(cell_2)) {
-                        if (rand() % 2) {
-                            dsu.func_union(cell_1, cell_2);
-                            matr[i][j + 1] = false;
-                        }
+        for (int j = 0; j < M; j++) {
+            int cell_1 = i * M + j;
+            if (j + 1 < M) {
+                int cell_2 = i * M + (j + 1);
+                if (dsu.find(cell_1) != dsu.find(cell_2)) {
+                    if (rand() % 2) {
+                        dsu.func_union(cell_1, cell_2);
+                        matr[i][j + 1] = false;
+                        matr[i][j] = false;
                     }
                 }
+            }
 
-                if (i + 1 < N) {
-                    int cell_2 = (i + 1) * M * j;
-                    if (dsu.find(cell_1) != dsu.find(cell_2)) {
-                        if (rand() % 2) {
-                            dsu.func_union(cell_1, cell_2);
-                            matr[i + 1][j] = false;
-                        }
+            if (i + 1 < N) {
+                int cell_2 = (i + 1) * M + j;
+                if (dsu.find(cell_1) != dsu.find(cell_2)) {
+                    if (rand() % 2) {
+                        dsu.func_union(cell_1, cell_2);
+                        matr[i + 1][j] = false;
+                        matr[i][j] = false;
                     }
                 }
             }
@@ -307,15 +307,35 @@ Matrix<bool> make_labirint(int X, int Y, int N, int M) {
     return matr;
 }
 
-void print(Matrix<bool> labirint, int N, int M) {
+void print(Matrix<bool>& labirint, int N, int M) {
+    for (int j = 0; j < M; j++) {
+        std::cout << " __";
+    }
+    std::cout << std::endl;
+
     for (int i = 0; i < N; i++) {
+        std::cout << "|";
+
         for (int j = 0; j < M; j++) {
-            if (labirint[i][j] == true) {
-                std::cout << "|  ";
+            if (!labirint[i][j]) { 
+                std::cout << "  ";
             }
-            else {
+            else { 
                 std::cout << "__";
             }
+
+            if (j == M - 1) {
+                std::cout << "|"; 
+            }
+            else {
+                if (labirint[i][j + 1] && labirint[i][j]) {
+                    std::cout << "|"; 
+                }
+                else {
+                    std::cout << " "; 
+                }
+            }
         }
+        std::cout << std::endl;
     }
 }
