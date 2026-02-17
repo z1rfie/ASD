@@ -1,13 +1,13 @@
 #include <gtest/gtest.h>
-#include "../lib_unsorted_table_m/unsorted_table_m.h"
+#include "../lib_unsorted_table_l/unsorted_table_l.h"
 
-TEST(TestUnsortedTableM, init_table) {
-    UnsortedTableM<int, std::string> table;
+TEST(TestUnsortedTableL, init_table) {
+    UnsortedTableL<int, std::string> table;
     EXPECT_TRUE(table.is_empty());
 }
 
-TEST(TestUnsortedTableM, insert_no_throw) {
-    UnsortedTableM<int, std::string> table;
+TEST(TestUnsortedTableL, insert_no_throw) {
+    UnsortedTableL<int, std::string> table;
     EXPECT_TRUE(table.is_empty());
     table.insert(1, "one");
     table.insert(2, "two");
@@ -16,8 +16,8 @@ TEST(TestUnsortedTableM, insert_no_throw) {
     std::cout << table;
 }
 
-TEST(TestUnsortedTableM, insert_throw) {
-    UnsortedTableM<int, std::string> table;
+TEST(TestUnsortedTableL, insert_throw) {
+    UnsortedTableL<int, std::string> table;
     EXPECT_TRUE(table.is_empty());
     table.insert(1, "one");
     table.insert(2, "two");
@@ -27,8 +27,8 @@ TEST(TestUnsortedTableM, insert_throw) {
     std::cout << table;
 }
 
-TEST(TestUnsortedTableM, erase_no_throw) {
-    UnsortedTableM<int, std::string> table;
+TEST(TestUnsortedTableL, erase_no_throw) {
+    UnsortedTableL<int, std::string> table;
     EXPECT_TRUE(table.is_empty());
     table.insert(1, "one");
     table.insert(3, "three");
@@ -39,8 +39,8 @@ TEST(TestUnsortedTableM, erase_no_throw) {
     std::cout << table;
 }
 
-TEST(TestUnsortedTableM, erase_throw) {
-    UnsortedTableM<int, std::string> table;
+TEST(TestUnsortedTableL, erase_throw) {
+    UnsortedTableL<int, std::string> table;
     EXPECT_TRUE(table.is_empty());
     table.insert(1, "one");
     table.insert(25, "twenty five");
@@ -53,8 +53,8 @@ TEST(TestUnsortedTableM, erase_throw) {
     std::cout << table;
 }
 
-TEST(TestUnsortedTableM, found_no_throw) {
-    UnsortedTableM<int, std::string> table;
+TEST(TestUnsortedTableL, found_no_throw) {
+    UnsortedTableL<int, std::string> table;
     EXPECT_TRUE(table.is_empty());
     table.insert(1, "one");
     table.insert(2, "two");
@@ -63,8 +63,8 @@ TEST(TestUnsortedTableM, found_no_throw) {
     EXPECT_EQ(table.found(2), "two");
 }
 
-TEST(TestUnsortedTableM, found_throw) {
-    UnsortedTableM<int, std::string> table;
+TEST(TestUnsortedTableL, found_throw) {
+    UnsortedTableL<int, std::string> table;
     EXPECT_TRUE(table.is_empty());
     table.insert(1, "one");
     table.insert(2, "two");
@@ -73,15 +73,15 @@ TEST(TestUnsortedTableM, found_throw) {
     EXPECT_ANY_THROW(table.found(18));
 }
 
-TEST(TestUnsortedTableM, is_empty) {
-    UnsortedTableM<int, std::string> table;
+TEST(TestUnsortedTableL, is_empty) {
+    UnsortedTableL<int, std::string> table;
     EXPECT_TRUE(table.is_empty());
     table.insert(777, "luck");
     EXPECT_FALSE(table.is_empty());
 }
 
-TEST(TestUnsortedTableM, insert_after_delete) {
-    UnsortedTableM<int, std::string> table;
+TEST(TestUnsortedTableL, insert_after_delete) {
+    UnsortedTableL<int, std::string> table;
     
     table.insert(1, "one");
     table.insert(2, "two");

@@ -1,11 +1,11 @@
 #ifndef LIB_UNSORTED_TABLE_M
 #define LIB_UNSORTED_TABLE_M
 
-#include "../lib_itable/itable.h"
+#include "../lib_table/table.h"
 #include "../lib_tvector/vector.h"
 
 template  <class TKey, class TValue>
-class UnsortedTableM : public ITable<TKey, TValue> {
+class UnsortedTableM : public Table<TKey, TValue> {
 	TVector <std::pair<TKey, TValue>> _rows;
 public:
 	UnsortedTableM() = default;
@@ -17,8 +17,7 @@ public:
 
 	bool is_empty() const noexcept override;
 
-	template<class K, class V>
-	friend std::ostream& operator<<(std::ostream&, const UnsortedTableM<K, V>&);
+	void print(std::ostream& os) const override;
 };
 
 template  <class TKey, class TValue>
@@ -57,12 +56,11 @@ bool UnsortedTableM<TKey, TValue>::is_empty() const noexcept {
 	return _rows.is_empty();
 }
 
-template<class K, class V>
-std::ostream& operator<<(std::ostream& os, const UnsortedTableM<K, V>& table) {
-	for (int i = 0; i < table._rows.size(); i++) {
-		os << "| " << table._rows[i].first << " | " << table._rows[i].second << " |" << std::endl;
+template  <class TKey, class TValue>
+void UnsortedTableM<TKey, TValue>::print(std::ostream& os) const {
+	for (int i = 0; i < _rows.size(); i++) {
+		os << "| " << _rows[i].first << " | " << _rows[i].second << " |" << std::endl;
 	}
-	return os;
 }
 
 #endif  // LIB_UNSORTED_TABLE_M

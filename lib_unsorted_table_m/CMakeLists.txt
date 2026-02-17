@@ -1,2 +1,2 @@
 create_project_lib(UnsortedTableM)
-add_depend(UnsortedTableM ITable lib_itable)
+add_depend(UnsortedTableM Table lib_table)
