@@ -42,7 +42,7 @@ void UnsortedTableL<TKey, TValue>::erase(const TKey& key) {
 }
 
 template <class TKey, class TValue>
-TValue& UnsortedTableL<TKey, TValue>::found(const TKey& key)  {
+TValue& UnsortedTableL<TKey, TValue>::found(const TKey& key) {
 	for (auto it = _rows.begin(); it != _rows.end(); it++) {
 		if ((*it).first == key) {
 			return (*it).second;  

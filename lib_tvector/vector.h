@@ -371,28 +371,30 @@ void TVector<T>::push_back_elem(const T& value) {
 
 template<class T>
 void TVector<T>::insert_elem(const T& value, size_t pos) {
-    pos--;
-    if (pos > _size) {
+    if (pos < 1 || pos > size() + 1)
         throw std::out_of_range("Insert position out of range");
-    }
 
-    if (_size > 0 && _states[pos] == deleted) {
-        _data[pos] = value;
-        _states[pos] = busy;
-        return;
-    }
+    size_t logical_index = pos - 1;
 
-    if (_size >= _capacity) {
+    if (_size >= _capacity)
         reallocate_memory(_capacity + STEP_OF_CAPACITY);
+
+    size_t real_pos = 0;
+    size_t visible_count = 0;
+
+    while (real_pos < _size && visible_count < logical_index) {
+        if (_states[real_pos] == busy)
+            visible_count++;
+        real_pos++;
     }
 
-    for (size_t i = _size; i > pos; i--) {
+    for (size_t i = _size; i > real_pos; i--) {
         _data[i] = _data[i - 1];
         _states[i] = _states[i - 1];
     }
 
-    _data[pos] = value;
-    _states[pos] = busy;
+    _data[real_pos] = value;
+    _states[real_pos] = busy;
     _size++;
 }
 

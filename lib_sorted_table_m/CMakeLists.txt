@@ -1,0 +1,2 @@
+create_project_lib(SortedTableM)
+add_depend(SortedTableM Table lib_table)
