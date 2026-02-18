@@ -351,14 +351,14 @@ void TVector<T>::push_front_elem(const T& value) {
 
 template<class T>
 void TVector<T>::push_back_elem(const T& value) {
-    for (size_t i = 0; i < _size; i++) {
+    /*for (size_t i = 0; i < _size; i++) {
         if (_states[i] == deleted) {
             _data[i] = value;
             _states[i] = busy;
             _deleted--;
             return;
         }
-    }
+    }*/
 
     if (_size >= _capacity) {
         reallocate_memory(_capacity + STEP_OF_CAPACITY);
@@ -891,18 +891,30 @@ bool TVector<T>::operator!=(const TVector<T>& other) const noexcept {
 
 template <typename T>
 T& TVector<T>::operator[](size_t pos) {
-    while (pos < _size && _states[pos] != busy) {
-        pos++;
+    size_t count = 0;
+
+    for (size_t i = 0; i < _size; i++) {
+        if (_states[i] == busy) {
+            if (count == pos) {
+                return _data[i];
+            }
+            count++;
+        }
     }
-    return _data[pos];
 }
 
 template <typename T>
 const T& TVector<T>::operator[](size_t pos) const {
-    while (pos < _size && _states[pos] != busy) {
-        pos++;
+    size_t count = 0;
+
+    for (size_t i = 0; i < _size; i++) {
+        if (_states[i] == busy) {
+            if (count == pos) {
+                return _data[i];
+            }
+            count++;
+        }
     }
-    return _data[pos];
 }
 
 //template <typename T>
