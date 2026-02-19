@@ -9,11 +9,10 @@ TEST(TestSortedTableM, init_table) {
 TEST(TestSortedTableM, insert_no_throw) {
     SortedTableM<int, std::string> table;
     EXPECT_TRUE(table.is_empty());
-    table.insert(106, "one");
-    table.insert(123, "two");
+    table.insert(100, "one");
+    table.insert(150, "two");
     table.insert(50, "three");
-    EXPECT_FALSE(table.is_empty());
-    std::cout << table;
+    EXPECT_FALSE(table.is_empty()); // [] скобки
 }
 
 TEST(TestSortedTableM, insert_throw) {
