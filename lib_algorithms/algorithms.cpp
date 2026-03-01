@@ -254,7 +254,7 @@ double calculate_polish(List<Lexem>& polish_record, std::map<std::string, double
     return stack.top();
 }
 
-Matrix<bool> make_labirint(int X, int Y, int N, int M) {
+Matrix<Cell> make_labirint(int X, int Y, int N, int M) {
     if (M <= 0 || N <= 0) {
         throw std::out_of_range("Нельзя создать такой лабиринт");
     }
@@ -265,17 +265,8 @@ Matrix<bool> make_labirint(int X, int Y, int N, int M) {
 
     srand(time(NULL));
 
-    Matrix<bool> matr(N, M);
+    Matrix<Cell> matr(N, M);
     DSU dsu(N * M);
-
-    for (int i = 0; i < N; i++) {
-        for (int j = 0; j < M; j++) {
-            matr[i][j] = true;
-        }
-    }
-
-    matr[0][X] = false;
-    matr[N - 1][Y] = false;
 
     for (int i = 0; i < N; i++) {
         for (int j = 0; j < M; j++) {
@@ -283,10 +274,11 @@ Matrix<bool> make_labirint(int X, int Y, int N, int M) {
             if (j + 1 < M) {
                 int cell_2 = i * M + (j + 1);
                 if (dsu.find(cell_1) != dsu.find(cell_2)) {
-                    if (rand() % 2) {
+                    if (rand() % 100 < 50) {
                         dsu.func_union(cell_1, cell_2);
-                        matr[i][j + 1] = false;
-                        matr[i][j] = false;
+
+                        matr[i][j].right = false;
+                        matr[i][j + 1].left = false;
                     }
                 }
             }
@@ -294,47 +286,41 @@ Matrix<bool> make_labirint(int X, int Y, int N, int M) {
             if (i + 1 < N) {
                 int cell_2 = (i + 1) * M + j;
                 if (dsu.find(cell_1) != dsu.find(cell_2)) {
-                    if (rand() % 2) {
+                    if (rand() % 100 < 50) {
                         dsu.func_union(cell_1, cell_2);
-                        matr[i + 1][j] = false;
-                        matr[i][j] = false;
+
+                        matr[i][j].bottom = false;
+                        matr[i + 1][j].top = false;
                     }
                 }
             }
         }
     }
 
+    matr[0][X].top = false;
+    matr[N - 1][Y].bottom = false;
+
     return matr;
 }
 
-void print(Matrix<bool>& labirint, int N, int M) {
+void print(Matrix<Cell>& labirint, int N, int M) {
+    std::cout << " ";
     for (int j = 0; j < M; j++) {
-        std::cout << " __";
+        if (labirint[0][j].top) std::cout << "__ ";
+        else std::cout << "   ";
     }
     std::cout << std::endl;
 
     for (int i = 0; i < N; i++) {
-        std::cout << "|";
+        if (labirint[i][0].left) std::cout << "|";
+        else std::cout << " ";
 
         for (int j = 0; j < M; j++) {
-            if (!labirint[i][j]) { 
-                std::cout << "  ";
-            }
-            else { 
-                std::cout << "__";
-            }
+            if (labirint[i][j].bottom) std::cout << "__";
+            else std::cout << "  ";
 
-            if (j == M - 1) {
-                std::cout << "|"; 
-            }
-            else {
-                if (labirint[i][j + 1] && labirint[i][j]) {
-                    std::cout << "|"; 
-                }
-                else {
-                    std::cout << " "; 
-                }
-            }
+            if (labirint[i][j].right) std::cout << "|";
+            else std::cout << " ";
         }
         std::cout << std::endl;
     }
