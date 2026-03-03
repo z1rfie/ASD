@@ -18,6 +18,7 @@ public:
 	bool is_empty() const noexcept override;
 
 	void print(std::ostream& os) const override;
+	TValue& operator[](const TKey& key) override;
 private:
 	int binary_search(const TKey&) const;
 };
@@ -85,5 +86,19 @@ int SortedTableM<TKey, TValue>::binary_search(const TKey& key) const {
 	return -left - 1; 
 }
 
+template <class TKey, class TValue>
+TValue& SortedTableM<TKey, TValue>::operator[](const TKey& key) {
+	int pos = binary_search(key);
+
+	if (pos >= 0) {
+		return _rows[pos].second;
+	}
+
+	pos = -pos - 1;
+
+	_rows.insert_elem(std::make_pair(key, TValue()), pos + 1);
+
+	return _rows[pos].second;
+}
 
 #endif  // LIB_UNSORTED_TABLE_M

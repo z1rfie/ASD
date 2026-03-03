@@ -11,6 +11,7 @@ public:
 	virtual void erase(const TKey&) = 0;
 	virtual TValue& found(const TKey&) = 0;
 	virtual bool is_empty() const noexcept = 0;
+	virtual TValue& operator[](const TKey& key) = 0;
 };
 
 #endif  // LIB_ITABLE

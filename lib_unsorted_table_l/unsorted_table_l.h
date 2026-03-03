@@ -18,6 +18,7 @@ public:
 	bool is_empty() const noexcept override;
 
 	void print(std::ostream& os) const override;
+	TValue& operator[](const TKey& key) override;
 };
 
 template  <class TKey, class TValue>
@@ -61,6 +62,25 @@ void UnsortedTableL<TKey, TValue>::print(std::ostream& os) const {
 	for (auto it = _rows.begin(); it != _rows.end(); it++) {
 		os << "| " << (*it).first << " | " << (*it).second << " |" << std::endl;
 	}
+}
+
+template <class TKey, class TValue>
+TValue& UnsortedTableL<TKey, TValue>::operator[](const TKey& key) {
+	for (auto it = _rows.begin(); it != _rows.end(); it++) {
+		if ((*it).first == key) {
+			return (*it).second;
+		}
+	}
+
+	_rows.push_back(std::make_pair(key, TValue()));
+
+	auto it = _rows.begin();
+	auto last = it;
+	for (; it != _rows.end(); it++) {
+		last = it;
+	}
+
+	return (*last).second;
 }
 
 #endif  // LIB_UNSORTED_TABLE_L

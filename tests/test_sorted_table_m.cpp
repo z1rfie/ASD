@@ -8,91 +8,130 @@ TEST(TestSortedTableM, init_table) {
 
 TEST(TestSortedTableM, insert_no_throw) {
     SortedTableM<int, std::string> table;
-    EXPECT_TRUE(table.is_empty());
-    table.insert(100, "one");
-    table.insert(150, "two");
-    table.insert(50, "three");
-    EXPECT_FALSE(table.is_empty()); // [] скобки
+
+    table.insert(1, "one");
+    table.insert(2, "two");
+    table.insert(3, "three");
+
+    EXPECT_EQ(table[1], "one");
+    EXPECT_EQ(table[2], "two");
+    EXPECT_EQ(table[3], "three");
 }
 
 TEST(TestSortedTableM, insert_throw) {
-    SortedTableM<std::string, std::string> table;
-    EXPECT_TRUE(table.is_empty());
-    table.insert("abc", "one");
-    table.insert("le", "two");
-    table.insert("third", "three");
-    std::cout << table;
-    EXPECT_FALSE(table.is_empty());
-    EXPECT_ANY_THROW(table.insert("le", "second"));
+    SortedTableM<int, std::string> table;
+
+    table.insert(1, "one");
+    table.insert(2, "two");
+
+    EXPECT_ANY_THROW(table.insert(2, "second"));
+
+    EXPECT_EQ(table[1], "one");
+    EXPECT_EQ(table[2], "two");
 }
 
 TEST(TestSortedTableM, erase_no_throw) {
     SortedTableM<int, std::string> table;
-    EXPECT_TRUE(table.is_empty());
+
     table.insert(1, "one");
     table.insert(3, "three");
-    EXPECT_FALSE(table.is_empty());
+
     table.erase(1);
     table.erase(3);
+
     EXPECT_TRUE(table.is_empty());
-    std::cout << table;
+
+    EXPECT_ANY_THROW(table.found(1));
+    EXPECT_ANY_THROW(table.found(3));
 }
 
 TEST(TestSortedTableM, erase_throw) {
     SortedTableM<int, std::string> table;
-    EXPECT_TRUE(table.is_empty());
+
     table.insert(1, "one");
     table.insert(25, "twenty five");
-    EXPECT_FALSE(table.is_empty());
+
     EXPECT_ANY_THROW(table.erase(4));
+
+    EXPECT_EQ(table[1], "one");
+    EXPECT_EQ(table[25], "twenty five");
+
     table.erase(1);
     table.erase(25);
+
     EXPECT_TRUE(table.is_empty());
-    EXPECT_ANY_THROW(table.erase(1));
-    std::cout << table;
 }
 
 TEST(TestSortedTableM, found_no_throw) {
     SortedTableM<int, std::string> table;
-    EXPECT_TRUE(table.is_empty());
+
     table.insert(1, "one");
     table.insert(2, "two");
     table.insert(3, "three");
-    EXPECT_FALSE(table.is_empty());
-    EXPECT_EQ(table.found(2), "two");
+
+    EXPECT_EQ(table[2], "two");
 }
 
 TEST(TestSortedTableM, found_throw) {
     SortedTableM<int, std::string> table;
-    EXPECT_TRUE(table.is_empty());
+
     table.insert(1, "one");
-    table.insert(2, "two");
-    table.insert(3, "three");
-    EXPECT_FALSE(table.is_empty());
+
     EXPECT_ANY_THROW(table.found(18));
 }
 
 TEST(TestSortedTableM, is_empty) {
     SortedTableM<int, std::string> table;
+
     EXPECT_TRUE(table.is_empty());
+
     table.insert(777, "luck");
+
     EXPECT_FALSE(table.is_empty());
 }
 
 TEST(TestSortedTableM, insert_after_delete) {
     SortedTableM<int, std::string> table;
-    
+
     table.insert(1, "one");
     table.insert(2, "two");
     table.insert(3, "three");
-    std::cout << table << std::endl;
 
     table.erase(2);
-    std::cout << table << std::endl;
+    EXPECT_ANY_THROW(table.found(2));
 
-    table.insert(18, "luck");
-    std::cout << table << std::endl;
+    table.insert(777, "luck");
+    EXPECT_EQ(table[777], "luck");
 
     table.insert(123, "abc");
-    std::cout << table << std::endl;
+    EXPECT_EQ(table[123], "abc");
+
+    EXPECT_EQ(table[1], "one");
+    EXPECT_EQ(table[3], "three");
+}
+
+TEST(TestSortedTableM, square_bracket_operator) {
+    SortedTableM<int, std::string> table;
+
+    ASSERT_TRUE(table.is_empty());
+
+    std::string& value = table[42];
+
+    ASSERT_FALSE(table.is_empty());
+
+    ASSERT_EQ(value, "");
+    ASSERT_EQ(table[42], "");
+
+    table[42] = "answer";
+
+    ASSERT_EQ(table[42], "answer");
+
+    table[100] = "hundred";
+
+    ASSERT_EQ(table[42], "answer");
+    ASSERT_EQ(table[100], "hundred");
+
+    std::string& new_value = table[999];
+    ASSERT_EQ(new_value, "");
+    ASSERT_EQ(table[999], "");
 }
