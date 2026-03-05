@@ -196,6 +196,6 @@ TEST(TestAlgorithmsLib, test_count_islands_null) {
 }
 
 TEST(TestAlgorithmsLib, test_labirint) {
-    Matrix<Cell> matr = make_labirint(0, 2, 5, 6);
+    Matrix<bool> matr = make_labirint(0, 2, 5, 6);
     print(matr, 5, 6);
 }

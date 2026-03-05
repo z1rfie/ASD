@@ -143,15 +143,8 @@ List<Lexem> build_polish(List<Lexem>& lexems);
 
 double calculate_polish(List<Lexem>& polish_record, std::map<std::string, double>& variables);
 
-struct Cell {
-    bool top = true;
-    bool bottom = true;
-    bool left = true;
-    bool right = true;
-};
+Matrix<bool> make_labirint(int X, int Y, int N, int M);
 
-Matrix<Cell> make_labirint(int X, int Y, int N, int M);
-
-void print(Matrix<Cell>& labirint, int N, int M);
+void print(Matrix<bool>& labirint, int N, int M);
 
 #endif // ALGORITHMS
