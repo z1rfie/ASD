@@ -119,8 +119,8 @@ size_t SkipList<TKey, TValue>::flip_coin() const noexcept {
 
 template <class TKey, class TValue>
 TVector<Node<TKey, TValue>*> SkipList<TKey, TValue>::find_insert_position(const TKey& key) const {
-    TVector<Node<TKey, TValue>*> update;
-    update.resize(_MAX_LEVEL + 1, nullptr);
+    TVector<Node<TKey, TValue>*> pointers;
+    pointers.resize(_MAX_LEVEL + 1, nullptr);
 
     for (int i = _level; i >= 0; i--) {
         Node<TKey, TValue>* current = _heads[i];
@@ -131,10 +131,10 @@ TVector<Node<TKey, TValue>*> SkipList<TKey, TValue>::find_insert_position(const 
             current = current->next_elem;
         }
 
-        update[i] = prev;
+        pointers[i] = prev;
     }
 
-    return update;
+    return pointers;
 }
 
 template <class TKey, class TValue>

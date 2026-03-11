@@ -29,6 +29,8 @@ add_subdirectory(lib_matrix)
 add_subdirectory(lib_dsu)
 add_subdirectory(lib_math_vector)
 add_subdirectory(lib_skip_list)
+add_subdirectory(lib_monom)
+add_subdirectory(lib_polynom)
 
 option(BTEST "build test?" ON)        # указываем подключаем ли google-тесты (ON или YES) или нет (OFF или NO)
 

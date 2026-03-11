@@ -3,7 +3,7 @@
 #include "skip_list.h"
 #include <gtest/gtest.h>
 
-TEST(TestSkipList, test_print) {
+TEST(TestSkipList, test_print_1) {
     SkipList<int, std::string> s_list(6);
     s_list.insert(1, "one");
     s_list.insert(9, "nine");
@@ -12,3 +12,13 @@ TEST(TestSkipList, test_print) {
 
     s_list.print();
 }
+
+//TEST(TestSkipList, test_print_2) {
+//    SkipList<std::string, std::string> s_list(5);
+//    s_list.insert("abc", "one");
+//    s_list.insert("lala", "nine");
+//    s_list.insert("lp", "seven");
+//    s_list.insert("emo", "fifteen");
+//
+//    s_list.print();
+//}

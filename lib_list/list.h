@@ -60,6 +60,9 @@
 		Iterator begin() { return Iterator(_head); }
 		Iterator end() { return Iterator(nullptr); }
 
+		Iterator begin() const { return Iterator(_head); }
+		Iterator end() const { return Iterator(nullptr); }
+
 		Node<T>* head();
 		Node<T>* tail();
 

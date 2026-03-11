@@ -300,6 +300,27 @@ Matrix<bool> make_labirint(int X, int Y, int N, int M) {
         }
     }
 
+    for (int i = 0; i < N; i++) {
+        for (int j = 0; j < M; j++) {
+            int cell_1 = i * M + j;
+            if (i > 0 && j + 1 < M) {
+                int cell_2 = i * M + (j + 1);
+                if (dsu.find(cell_1) != dsu.find(cell_2)) {
+                    dsu.func_union(cell_1, cell_2);
+                    matr[i][j] = false;
+                }
+            }
+
+            if (i + 1 < N) {
+                int cell_2 = (i + 1) * M + j;
+                if (dsu.find(cell_1) != dsu.find(cell_2)) {
+                    dsu.func_union(cell_1, cell_2);
+                    matr[i][j + M] = false;
+                }
+            }
+        }
+    }
+
     matr[0][X] = false;
     matr[N - 1][Y + M] = false;
 
