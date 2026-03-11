@@ -135,3 +135,46 @@ TEST(TestSortedTableM, square_bracket_operator) {
     ASSERT_EQ(new_value, "");
     ASSERT_EQ(table[999], "");
 }
+
+TEST(TestSortedTableM, sorted_order_by_address) {
+    SortedTableM<int, std::string> table;
+
+    table.insert(5, "five");
+    table.insert(1, "one");
+    table.insert(3, "three");
+    table.insert(2, "two");
+    table.insert(4, "four");
+
+    EXPECT_LT(&table[1], &table[2]);
+    EXPECT_LT(&table[2], &table[3]);
+    EXPECT_LT(&table[3], &table[4]);
+    EXPECT_LT(&table[4], &table[5]);
+}
+
+TEST(TestSortedTableM, sorted_order_after_insert) {
+    SortedTableM<int, std::string> table;
+    table.insert(10, "ten");
+    table.insert(20, "twenty");
+
+    EXPECT_LT(&table[10], &table[20]);
+
+    table.insert(15, "fifteen");
+
+    EXPECT_LT(&table[10], &table[15]);
+    EXPECT_LT(&table[15], &table[20]);
+}
+
+TEST(TestSortedTableM, sorted_order_after_erase) {
+    SortedTableM<int, std::string> table;
+    table.insert(1, "one");
+    table.insert(2, "two");
+    table.insert(3, "three");
+    table.insert(4, "four");
+
+    table.erase(2);
+    table.insert(5, "five");
+
+    EXPECT_LT(&table[1], &table[3]);
+    EXPECT_LT(&table[3], &table[4]);
+    EXPECT_LT(&table[4], &table[5]);
+}
