@@ -192,4 +192,6 @@ public:
 		}
 		return is;
 	}
+
+	double get_coefficient() const { return _coefficient; }
 };

@@ -37,29 +37,14 @@ public:
             while (i < n && (isdigit(str[i]) || str[i] == '.')) i++;
             double coef;
             if (i > coef_start) {
-                coef = 0.0;
-                int j = coef_start;
-                while (j < i && isdigit(str[j])) {
-                    coef = coef * 10 + (str[j] - '0');
-                    j++;
-                }
-                if (j < i && str[j] == '.') {
-                    j++;
-                    double fraction = 0.1;
-                    while (j < i && isdigit(str[j])) {
-                        coef += (str[j] - '0') * fraction;
-                        fraction *= 0.1;
-                        j++;
-                    }
-                }
-                coef *= sign;
+                coef = std::stod(str.substr(coef_start, i - coef_start)) * sign;
             }
             else {
-                coef = sign;
+                coef = sign; 
             }
 
             int powers[VARS_COUNT] = { 0, 0, 0 };
-            char vars[] = { 'x', 'y', 'z' };
+            const char vars[] = { 'x', 'y', 'z' };
             while (i < n && str[i] != '+' && str[i] != '-') {
                 if (str[i] == ' ') { i++; continue; }
 
@@ -68,7 +53,7 @@ public:
                     if (str[i] == vars[v]) {
                         i++;
                         if (i < n && str[i] == '^') {
-                            i++; 
+                            i++;
                             int power = 0;
                             while (i < n && isdigit(str[i])) {
                                 power = power * 10 + (str[i] - '0');
@@ -95,6 +80,10 @@ public:
     List<Monom>::Iterator end() const { return _polynom.end(); }
 
     Polynom& operator+=(const Monom& other) {
+        if (std::abs(other.get_coefficient()) < 1e-9) {
+            return *this; 
+        }
+
         auto it = _polynom.begin();
         Node<Monom>* prev_node = nullptr;
 
@@ -105,6 +94,9 @@ public:
 
         if (it != _polynom.end() && *it == other) {
             *it += other;
+            if (std::abs((*it).get_coefficient()) < 1e-9) {
+                _polynom.erase(it.get_node());
+            }
             return *this;
         }
 
@@ -181,6 +173,7 @@ public:
 
     Polynom operator*(const Polynom& other) const {
         Polynom res;
+        res._polynom.pop_front(); 
         for (auto it1 = _polynom.begin(); it1 != _polynom.end(); ++it1) {
             for (auto it2 = other.begin(); it2 != other.end(); ++it2) {
                 res += (*it1) * (*it2);
@@ -219,10 +212,25 @@ public:
     }
 
     friend std::ostream& operator<<(std::ostream& os, const Polynom& p) {
+        if (p._polynom.is_empty()) {
+            os << "0";
+            return os;
+        }
         bool first = true;
         for (auto it = p.begin(); it != p.end(); ++it) {
-            if (!first) os << " + ";
-            os << *it;
+            if (!first) {
+                if ((*it).get_coefficient() < 0) {
+                    os << " - "; 
+                    os << -(*it); 
+                }
+                else {
+                    os << " + ";
+                    os << *it;
+                }
+            }
+            else {
+                os << *it; 
+            }
             first = false;
         }
         return os;

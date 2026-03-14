@@ -254,44 +254,23 @@ double calculate_polish(List<Lexem>& polish_record, std::map<std::string, double
     return stack.top();
 }
 
-Matrix<bool> make_labirint(int X, int Y, int N, int M) {
-    if (M <= 0 || N <= 0) {
-        throw std::out_of_range("Нельзя создать такой лабиринт");
-    }
-
-    if (X < 0 || X >= M || Y < 0 || Y >= M) {
-        throw std::out_of_range("Недопустимое значение");
-    }
-
-    srand(time(NULL));
-
-    Matrix<bool> matr(N, M * 2);
-
-    for (int i = 0; i < N; i++) {
-        for (int j = 0; j < M * 2; j++) {
-            matr[i][j] = true;
-        }
-    }
-
-    DSU dsu(N * M);
-
+void process_walls(Matrix<bool>& matr, DSU& dsu, int N, int M, bool random) {
     for (int i = 0; i < N; i++) {
         for (int j = 0; j < M; j++) {
             int cell_1 = i * M + j;
             if (i > 0 && j + 1 < M) {
                 int cell_2 = i * M + (j + 1);
                 if (dsu.find(cell_1) != dsu.find(cell_2)) {
-                    if (rand() % 100 < 50) {
+                    if (!random || rand() % 100 < 50) {
                         dsu.func_union(cell_1, cell_2);
-                        matr[i][j] = false; 
+                        matr[i][j] = false;
                     }
                 }
             }
-
             if (i + 1 < N) {
                 int cell_2 = (i + 1) * M + j;
                 if (dsu.find(cell_1) != dsu.find(cell_2)) {
-                    if (rand() % 100 < 50) {
+                    if (!random || rand() % 100 < 50) {
                         dsu.func_union(cell_1, cell_2);
                         matr[i][j + M] = false;
                     }
@@ -299,31 +278,26 @@ Matrix<bool> make_labirint(int X, int Y, int N, int M) {
             }
         }
     }
+}
 
+Matrix<bool> make_labirint(int X, int Y, int N, int M) {
+    if (M <= 0 || N <= 0) throw std::out_of_range("Нельзя создать такой лабиринт");
+    if (X < 0 || X >= M || Y < 0 || Y >= M) throw std::out_of_range("Недопустимое значение");
+
+    srand(time(NULL));
+    Matrix<bool> matr(N, M * 2);
     for (int i = 0; i < N; i++) {
-        for (int j = 0; j < M; j++) {
-            int cell_1 = i * M + j;
-            if (i > 0 && j + 1 < M) {
-                int cell_2 = i * M + (j + 1);
-                if (dsu.find(cell_1) != dsu.find(cell_2)) {
-                    dsu.func_union(cell_1, cell_2);
-                    matr[i][j] = false;
-                }
-            }
-
-            if (i + 1 < N) {
-                int cell_2 = (i + 1) * M + j;
-                if (dsu.find(cell_1) != dsu.find(cell_2)) {
-                    dsu.func_union(cell_1, cell_2);
-                    matr[i][j + M] = false;
-                }
-            }
+        for (int j = 0; j < M * 2; j++) {
+            matr[i][j] = true;
         }
     }
 
+    DSU dsu(N * M);
+    process_walls(matr, dsu, N, M, true);  
+    process_walls(matr, dsu, N, M, false); 
+
     matr[0][X] = false;
     matr[N - 1][Y + M] = false;
-
     return matr;
 }
 
