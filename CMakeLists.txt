@@ -23,6 +23,9 @@ add_subdirectory(lib_unsorted_table_l)
 add_subdirectory(lib_table)
 add_subdirectory(lib_list)
 add_subdirectory(lib_sorted_table_m)
+add_subdirectory(lib_tree)
+add_subdirectory(lib_list_queue)
+add_subdirectory(lib_unsorted_table_t)
 
 option(BTEST "build test?" ON)        # указываем подключаем ли google-тесты (ON или YES) или нет (OFF или NO)
 
