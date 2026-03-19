@@ -44,7 +44,7 @@ public:
             }
 
             int powers[VARS_COUNT] = { 0, 0, 0 };
-            const char vars[] = { 'x', 'y', 'z' };
+            char vars[] = { 'x', 'y', 'z' };
             while (i < n && str[i] != '+' && str[i] != '-') {
                 if (str[i] == ' ') { i++; continue; }
 

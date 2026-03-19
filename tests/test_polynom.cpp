@@ -78,6 +78,15 @@ TEST(TestPolynom, add_monom) {
     EXPECT_DOUBLE_EQ(result.calculate_value_point(2, 3, 4), 25.0);
 }
 
+TEST(TestPolynom, add_polynom_and_monom) {
+    Polynom p("x^2 + y^2");
+    int powers[3] = { 0, 0, 1 };
+    Monom m(3.0, powers);
+    Polynom result = m + p;
+    EXPECT_DOUBLE_EQ(result.calculate_value_point(2, 3, 4), 25.0);
+}
+
+
 TEST(TestPolynom, add_monom_sorted_order) {
     int p1[3] = { 0, 2, 0 }; 
     int p2[3] = { 2, 0, 0 };  
@@ -108,6 +117,9 @@ TEST(TestPolynom, add_polynom) {
 
 TEST(TestPolynom, add_similar_terms) {
     Polynom p("x^2 + 2x^2");
+    std::stringstream ss;
+    ss << p;
+    EXPECT_EQ(ss.str(), "3x^2");
     EXPECT_DOUBLE_EQ(p.calculate_value_point(2, 1, 1), 12.0);
 }
 
@@ -116,6 +128,9 @@ TEST(TestPolynom, add_cancel_terms) {
     int powers[3] = { 2, 0, 0 };
     Monom m(-1.0, powers);
     p += m;
+    std::stringstream ss;
+    ss << p;
+    EXPECT_EQ(ss.str(), "2xy");
     EXPECT_DOUBLE_EQ(p.calculate_value_point(2, 3, 1), 12.0); 
 }
 
