@@ -16,6 +16,7 @@ class Tree {
 public:
 	Tree();
 	~Tree();
+
 	void insert(const TKey&, const TValue&);
 	TValue* find(const TKey&) const noexcept; 
 	void erase(const TKey&);

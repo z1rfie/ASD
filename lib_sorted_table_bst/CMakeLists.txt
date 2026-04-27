@@ -1,0 +1,2 @@
+create_project_lib(SortedTableBST)
+add_depend(SortedTableBST Table lib_table)

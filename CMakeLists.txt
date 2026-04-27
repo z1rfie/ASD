@@ -26,6 +26,13 @@ add_subdirectory(lib_sorted_table_m)
 add_subdirectory(lib_tree)
 add_subdirectory(lib_list_queue)
 add_subdirectory(lib_unsorted_table_t)
+add_subdirectory(lib_bst)
+add_subdirectory(lib_sorted_table_bst)
+add_subdirectory(lib_heap)
+add_subdirectory(lib_priority_queue)
+add_subdirectory(lib_hash_table)
+add_subdirectory(lib_avl_tree)
+add_subdirectory(lib_graph)
 
 option(BTEST "build test?" ON)        # указываем подключаем ли google-тесты (ON или YES) или нет (OFF или NO)
 
